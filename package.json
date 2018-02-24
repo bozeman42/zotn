@@ -1,0 +1,38 @@
+{
+  "name": "zotn",
+  "version": "1.0.0",
+  "description": "Asset management software for Zombies of the North",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "prod": "webpack -p",
+    "start": "webpack -p && node server/server.js",
+    "dev-build": "webpack -d"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/bozeman42/zotn.git"
+  },
+  "author": "Aaron Kvarnlov-Leverty",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/bozeman42/zotn/issues"
+  },
+  "homepage": "https://github.com/bozeman42/zotn#readme",
+  "dependencies": {
+    "angular": "^1.6.9",
+    "angular-route": "^1.6.9",
+    "express": "^4.16.2",
+    "html-webpack-plugin": "^2.30.1",
+    "webpack": "^3.11.0"
+  },
+  "devDependencies": {
+    "babel-core": "^6.26.0",
+    "babel-loader": "^7.1.2",
+    "babel-preset-env": "^1.6.1",
+    "css-loader": "^0.28.10",
+    "node-sass": "^4.7.2",
+    "sass-loader": "^6.0.6",
+    "style-loader": "^0.20.2"
+  }
+}
