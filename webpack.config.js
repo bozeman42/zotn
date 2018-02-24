@@ -24,12 +24,22 @@ module.exports = {
       {
         test: /\.scss$/,
         use: ['style-loader','css-loader','sass-loader']
+      },
+      {
+        test: /\.html$/,
+        use: [{
+          loader: 'file-loader',
+          options: {
+            name: '[path][name].[ext]',
+            publicPath: '/',
+            context: './src/'
+          }
+        }]
       }
     ]
   },
   plugins: [
     new HtmlWebpackPlugin({
-      title: 'Webpack template generator',
       minify: {
         collapseWhitespace: true
       },

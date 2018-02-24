@@ -1,7 +1,5 @@
 export default class PlayerSelectController {
-  constructor() {
-    const vm = this;
+  constructor(PlayerService) {
+    this.data = PlayerService.data;
   }
-
-  
 }
