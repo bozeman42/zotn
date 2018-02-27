@@ -14,6 +14,12 @@ module.exports = {
     stats: 'errors-only',
     open: true
   },
+  watch: true,
+  watchOptions: {
+    ignored: /node_modules/,
+    poll: 1000,
+    aggregateTimeout: 300
+  },
   module: {
     rules: [
       {
