@@ -8,7 +8,8 @@ export default class PlayerSelectController {
   }
 
   getPlayers() {
-    this.$http.get('/players')
+    console.log('Service getPlayers called');
+    return this.$http.get('/players')
     .then((response) => this.data.players = response.data)
     .catch((error) => console.log(error));
   }

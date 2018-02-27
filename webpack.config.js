@@ -26,6 +26,17 @@ module.exports = {
         use: ['style-loader','css-loader','sass-loader']
       },
       {
+        test: /\.png$/,
+        use: [{
+          loader: 'file-loader',
+          options: {
+            name: '[path][name].[ext]',
+            publicPath: '',
+            context: './src/'
+          }
+        }]
+      },
+      {
         test: /\.html$/,
         use: [{
           loader: 'file-loader',

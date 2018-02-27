@@ -1,6 +1,7 @@
 // import any html views used in project
 import '../views/templates/player-select.html';
 import '../views/templates/404.html';
+import '../views/partials/footer.html';
 
 export default function ($routeProvider, $locationProvider) {
   $locationProvider.hashPrefix('');
