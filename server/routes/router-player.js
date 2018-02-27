@@ -8,6 +8,7 @@ router.get('/',(req,res) => {
     } else {
       const queryText = 'SELECT * FROM players';
       client.query(queryText,(queryError,result) => {
+        done();
         if (queryError) {
           res.sendStatus(500);
         } else {

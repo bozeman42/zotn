@@ -5,7 +5,8 @@ import hunterIcon from '../../assets/images/hunter-icon.png';
 export default class PlayerSelectController {
   constructor($http) {
     this.data = {
-      players: []
+      players: [],
+      currentPlayer: {}
     };
     this.$http = $http;
     this.getPlayers();
@@ -18,7 +19,7 @@ export default class PlayerSelectController {
       this.data.players.forEach(this.assignIcons);
       return this.data.players;
     })
-    .catch((error) => console.log(error));
+    .catch((error) => console.log('an error occured',error));
   }
 
   assignIcons(player) {
