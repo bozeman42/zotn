@@ -25,7 +25,7 @@ app
 
 // inject dependencies here ['dependency','dependency2',etc]
 PlayerService.$inject = ['$http'];
-PlayerSelectController.$inject = ['$location','PlayerService'];
+PlayerSelectController.$inject = ['$location','$scope','PlayerService'];
 KillController.$inject = ['$location','PlayerService'];
 DeathController.$inject = ['$location','PlayerService'];
 ShopController.$inject = ['$location','PlayerService'];
