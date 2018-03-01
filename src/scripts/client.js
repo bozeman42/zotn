@@ -5,8 +5,10 @@ import Controller404 from './controllers/controller-404';
 import PlayerService from './services/service-player';
 import KillController from './controllers/controller-kills';
 import DeathController from './controllers/controller-death';
+import ShopController from './controllers/controller-shop';
+import FooterController from './controllers/controller-footer';
 import routing from './routing';
-require('angular-route');
+import 'angular-route';
 
 const app = angular.module('app', ['ngRoute']);
 
@@ -15,7 +17,9 @@ app
   .controller('PlayerSelectController',PlayerSelectController)
   .controller('404Controller',Controller404)
   .controller('KillController',KillController)
-  .controlelr('DeathController',DeathController)
+  .controller('DeathController',DeathController)
+  .controller('FooterController',FooterController)
+  .controller('ShopController',ShopController)
   .service('PlayerService',PlayerService)
   .config(routing);
 
@@ -24,6 +28,8 @@ PlayerService.$inject = ['$http'];
 PlayerSelectController.$inject = ['$location','PlayerService'];
 KillController.$inject = ['$location','PlayerService'];
 DeathController.$inject = ['$location','PlayerService'];
+ShopController.$inject = ['$location','PlayerService'];
+FooterController.$inject = ['$location'];
 
 
 export default app;

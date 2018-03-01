@@ -10,6 +10,6 @@ export default class PlayerSelectController {
 
   selectPlayer(player){
     this.data.currentPlayer = player;
-    this.$location.path('/kills');
+    this.$location.path(`/kills/${player.id}`);
   }
 }

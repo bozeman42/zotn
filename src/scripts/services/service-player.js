@@ -5,7 +5,7 @@ import hunterIcon from '../../assets/images/hunter-icon.png';
 export default class PlayerSelectController {
   constructor($http) {
     this.data = {
-      players: [],
+      players: {},
       currentPlayer: {}
     };
     this.$http = $http;
@@ -13,11 +13,16 @@ export default class PlayerSelectController {
   }
 
   getPlayers() {
-    return this.$http.get('/players')
+    let vm = this;
+    return vm.$http.get('/players')
     .then((response) => {
-      this.data.players = response.data;
-      this.data.players.forEach(this.assignIcons);
-      return this.data.players;
+      const players = response.data;
+      players.forEach((player) => {
+        vm.assignIcons(player);
+        vm.data.players[player.id] = player;
+      })
+      console.log(vm.data.players);
+      return vm.data.players;
     })
     .catch((error) => console.log('an error occured',error));
   }

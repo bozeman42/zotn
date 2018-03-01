@@ -2,6 +2,7 @@ import { HUNTER, ZOMBIE } from '../constants/factions';
 
 export default class KillController {
   constructor($location, PlayerService){
+    this.$location = $location;
     this.data = {};
     this.data.message = '';
     this.data.player = PlayerService.data.currentPlayer;
@@ -19,4 +20,9 @@ export default class KillController {
       this.data.message = zombieMsg;
     }
   }
+
+  finalizeKills() {
+    this.$location.path('/death');
+  }
+
 }
