@@ -2,7 +2,7 @@ import Instascan from 'instascan';
 console.log(Instascan);
 function scanner(element, callback) {
   const options = {
-    scanPeriod: 10
+    scanPeriod: 60
   }
   if (element) {
     options.video = document.getElementById(element)

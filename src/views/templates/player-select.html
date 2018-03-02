@@ -1,10 +1,7 @@
 <div>
   <div>
-    <h1>Scan Badge</h1>
-    <video id="scanPreview" height="100" width="100"></video>
-    <h1>Type: {{psc.message.entity_type}}</h1>
-    <h1>ID: {{psc.message.entity_id}}</h1>
-    {{psc.message}}
+    <h1>{{psc.message}}</h1>
+    <video id="scanPreview" height="100" width="200"></video>
   </div>
   <ul>
     <li ng-repeat="player in psc.data.players">

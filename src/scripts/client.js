@@ -6,6 +6,7 @@ import PlayerService from './services/service-player';
 import KillController from './controllers/controller-kills';
 import DeathController from './controllers/controller-death';
 import ShopController from './controllers/controller-shop';
+import RegisterController from './controllers/controller-register';
 import FooterController from './controllers/controller-footer';
 import routing from './routing';
 import 'angular-route';
@@ -20,6 +21,7 @@ app
   .controller('DeathController',DeathController)
   .controller('FooterController',FooterController)
   .controller('ShopController',ShopController)
+  .controller('RegisterController',RegisterController)
   .service('PlayerService',PlayerService)
   .config(routing);
 
@@ -29,6 +31,7 @@ PlayerSelectController.$inject = ['$location','$scope','PlayerService'];
 KillController.$inject = ['$location','PlayerService'];
 DeathController.$inject = ['$location','PlayerService'];
 ShopController.$inject = ['$location','PlayerService'];
+RegisterController.$inject = ['$location','$http','$scope','PlayerService'];
 FooterController.$inject = ['$location'];
 
 

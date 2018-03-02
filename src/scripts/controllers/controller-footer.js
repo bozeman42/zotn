@@ -5,4 +5,8 @@ export default class {
   restart(){
     this.$location.path('/');
   }
+
+  register() {
+    this.$location.path('/register');
+  }
 }

@@ -5,27 +5,49 @@ import scanner from '../modules/scanner';
 export default class PlayerSelectController {
   constructor($location, $scope, PlayerService) {
     this.data = PlayerService.data;
-    this.message = '';
+    this.$location = $location;
+    this.message = 'Scan Badge...';
     this.badge = {};
+    this.$scope = $scope;
     const vm = this;
     PlayerService.getPlayers()
-    this.$location = $location;
-    scanner(null,(content) => {
-      $scope.$apply(() => {
-        const {players} = this.data;
-        console.log(content);
+    this.startScanner();
+  }
+
+  startScanner(){
+    scanner("scanPreview",(content) => {
+      const vm = this;
+      vm.$scope.$apply(() => {
+        const {players} = vm.data;
         vm.badge = JSON.parse(content);
-        console.log(vm.badge);
-        if (vm.badge.entity_type = "badge"){
-          vm.data.currentPlayer = players[vm.badge.entity_id];
-          vm.$location.path(`kills/${vm.badge.entity_id}`);
+        if (vm.isBadgeValid(vm.badge)){
+          if (vm.playerExists(vm.badge)){
+            vm.setCurrentPlayer(vm.badge);
+            this.navigateToKillScreen();
+          } else {
+            vm.message = "This badge is not associated with a player account.";
+          }
+        } else {
+          vm.message = "Please scan a valid player badge.";
         }
       })
     });
   }
 
-  selectPlayer(player){
-    this.data.currentPlayer = player;
-    this.$location.path(`/kills/${player.id}`);
+  isBadgeValid(badge) {
+    return (badge.EntityType === "Badge" && badge.EntityId);
+  }
+
+  setCurrentPlayer(badge){
+    const {players} = this.data;
+    this.data.currentPlayer = players[badge.EntityId];
+  }
+
+  navigateToKillScreen(){
+    this.$location.path(`kills/${this.badge.EntityId}`);
+  }
+
+  playerExists(badge){
+    return this.data.players.hasOwnProperty(badge.EntityId);
   }
 }

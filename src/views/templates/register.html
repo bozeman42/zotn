@@ -1,0 +1,5 @@
+<h1>{{rc.message}}</h1>
+<div ng-if="rc.badge">
+  <input type="text" ng-model="rc.newplayer.nickname">
+  <button ng-click="rc.setNickname(rc.newplayer.nickname)">Set Name</button>
+</div>
