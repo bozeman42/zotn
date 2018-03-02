@@ -1,4 +1,8 @@
 <div>
+  <div>
+    <h1>{{psc.message}}</h1>
+    <video id="scanPreview" height="100" width="200"></video>
+  </div>
   <ul>
     <li ng-repeat="player in psc.data.players">
       <button ng-click="psc.selectPlayer(player)">
