@@ -1,27 +1,33 @@
-import scanner from '../modules/scanner';
+
 // injected dependencies:
 // PlayerService
 
 export default class PlayerSelectController {
-  constructor($location, $scope, PlayerService) {
+  constructor($location, $scope, PlayerService, ScannerService) {
+    const ps = PlayerService;
+    this.ss = ScannerService;
     this.data = PlayerService.data;
     this.$location = $location;
     this.message = 'Scan Badge...';
     this.badge = {};
     this.$scope = $scope;
     const vm = this;
-    PlayerService.getPlayers()
-    this.startScanner();
+    ps.getPlayers()
+    this.startPlayerBadgeLoginScanner();
   }
 
-  startScanner(){
-    scanner("scanPreview",(content) => {
+  startPlayerBadgeLoginScanner(){
+    this.ss.startScanner("scanPreview",(content) => {
       const vm = this;
+      const {ss} = this;
+      const {scanner} = ss;
       vm.$scope.$apply(() => {
         const {players} = vm.data;
         vm.badge = JSON.parse(content);
         if (vm.isBadgeValid(vm.badge)){
           if (vm.playerExists(vm.badge)){
+            console.log("This is the scanner",scanner);
+            ss.stop();
             vm.setCurrentPlayer(vm.badge);
             this.navigateToKillScreen();
           } else {

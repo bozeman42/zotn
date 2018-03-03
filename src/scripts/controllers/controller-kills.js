@@ -1,12 +1,18 @@
 import { HUNTER, ZOMBIE } from '../constants/factions';
 
 export default class KillController {
-  constructor($location, PlayerService){
+  constructor($location,$routeParams, PlayerService){
     this.$location = $location;
-    this.data = {};
-    this.data.message = '';
-    this.data.player = PlayerService.data.currentPlayer;
-    this.selectMessage();
+    this.data = {
+      message: '',
+      playerId: $routeParams.id,
+      player: {}
+    };
+    PlayerService.getPlayers()
+    .then(()=>{
+      this.data.player = PlayerService.data.players[this.data.playerId];
+      this.selectMessage();
+    })
   }
 
   selectMessage() {

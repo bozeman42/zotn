@@ -1,5 +1,5 @@
 import Instascan from 'instascan';
-console.log(Instascan);
+
 function scanner(element, callback) {
   const options = {
     scanPeriod: 60
@@ -11,7 +11,6 @@ function scanner(element, callback) {
   scanner.addListener('scan', callback);
   Instascan.Camera.getCameras().then(function (cameras) {
     if (cameras.length > 0) {
-      console.log(cameras);
       scanner.start(cameras[0]);
     } else {
       console.error('No cameras found.');
