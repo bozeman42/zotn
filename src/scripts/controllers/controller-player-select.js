@@ -17,7 +17,7 @@ export default class PlayerSelectController {
   }
 
   startPlayerBadgeLoginScanner(){
-    this.ss.startScanner("scanPreview",(content) => {
+    this.ss.startScanner(null,(content) => {
       const vm = this;
       const {ss} = this;
       const {scanner} = ss;
@@ -29,6 +29,8 @@ export default class PlayerSelectController {
             console.log("This is the scanner",scanner);
             ss.stop();
             vm.setCurrentPlayer(vm.badge);
+            
+            // speechSynthesis.speak(new SpeechSynthesisUtterance(`Hello, ${this.data.currentPlayer.nickname}. Identity confirmed.`));
             this.navigateToKillScreen();
           } else {
             vm.message = "This badge is not associated with a player account.";
@@ -38,6 +40,12 @@ export default class PlayerSelectController {
         }
       })
     });
+  }
+
+
+  selectPlayer(player){
+    this.data.currentPlayer = player;
+    this.navigateToKillScreen();
   }
 
   isBadgeValid(badge) {
@@ -50,7 +58,7 @@ export default class PlayerSelectController {
   }
 
   navigateToKillScreen(){
-    this.$location.path(`kills/${this.badge.EntityId}`);
+    this.$location.path(`kills/${this.data.currentPlayer.id}`);
   }
 
   playerExists(badge){

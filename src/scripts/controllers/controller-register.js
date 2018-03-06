@@ -33,15 +33,22 @@ export default class PlayerSelectController {
     const vm = this;
     vm.$scope.$apply(() => {
       vm.badge = JSON.parse(content);
+      vm.ss.stop();
       const { players } = vm.data;
       const { badge } = vm;
       if (vm.isBadgeValid(badge)) {
         if (vm.playerExists(badge)) {
           vm.message = "This badge is already associated with a player account.";
+          setTimeout(() => {
+            vm.$scope.$apply(() => {
+              console.log(vm);
+              vm.message = 'Please scan your Con badge...';
+              vm.startRegistrationScanner();
+            })
+          },2000);
           vm.badge = null;
         } else {
           vm.getPlayerInfo();
-          
         }
       } else {
         vm.message = 'Invalid player badge.';
