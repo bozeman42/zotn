@@ -22,6 +22,8 @@ export default class PlayerSelectController {
       const {ss,ss:{scanner}} = vm;
       let {badge} = vm;
       vm.$scope.$apply(() => {
+
+      // TODO: make this check a reusable function for all scans
       try {
         badge = JSON.parse(content);
       } catch (error) {
@@ -29,6 +31,7 @@ export default class PlayerSelectController {
         ss.stop()
         vm.resetScanner();
       }
+
       ss.stop();
         const {players} = vm.data;
         if (vm.isBadgeValid(badge)){
