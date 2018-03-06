@@ -1,10 +1,11 @@
-
+import chime from '../../assets/sounds/electronic_chime.mp3';
 // injected dependencies:
 // PlayerService
 
 export default class PlayerSelectController {
   constructor($location, $scope, PlayerService, ScannerService) {
     const ps = PlayerService;
+    window.controller = this;
     this.ss = ScannerService;
     this.data = PlayerService.data;
     this.$location = $location;
@@ -12,75 +13,82 @@ export default class PlayerSelectController {
     this.badge = {};
     this.$scope = $scope;
     const vm = this;
+    vm.chime = new Audio(chime);
     ps.getPlayers()
     this.startPlayerBadgeLoginScanner();
   }
 
-  startPlayerBadgeLoginScanner(){
-    this.ss.startScanner(null,(content) => {
-      const vm = this;
-      const {ss,ss:{scanner}} = vm;
-      let {badge} = vm;
+  startPlayerBadgeLoginScanner() {
+    const vm = this;
+    vm.ss.startScanner(null, (content) => {
       vm.$scope.$apply(() => {
-
-      // TODO: make this check a reusable function for all scans
-      try {
-        badge = JSON.parse(content);
-      } catch (error) {
-        vm.message = 'Invalid data format. Please have team check badge...';
-        ss.stop()
-        vm.resetScanner();
-      }
-
-      ss.stop();
-        const {players} = vm.data;
-        if (vm.isBadgeValid(badge)){
-          if (vm.playerExists(badge)){
-            console.log("This is the scanner",scanner);
-            vm.setCurrentPlayer(badge);
-            // speechSynthesis.speak(new SpeechSynthesisUtterance(`Hello, ${this.data.currentPlayer.nickname}. Identity confirmed.`));
-            this.navigateToKillScreen();
-          } else {
-            vm.message = "This badge is not associated with a player account.";
-            vm.resetScanner()
-          }
+        if (vm.isLoginSuccessful(content)) {
+          vm.ss.stop();
+          vm.navigateToKillScreen();
         } else {
-          vm.message = "Please scan a valid player badge.";
+          vm.ss.stop()
           vm.resetScanner();
         }
-      })
-    });
+      });
+    })
   }
 
-  resetScanner(){
+  resetScanner() {
     const vm = this;
     setTimeout(() => {
       vm.$scope.$apply(() => {
         vm.message = 'Scan badge...';
         vm.startPlayerBadgeLoginScanner();
       })
-    },2000);
+    }, 2000);
   }
 
-  selectPlayer(player){
+  selectPlayer(player) {
     this.data.currentPlayer = player;
     this.navigateToKillScreen();
+  }
+
+  isLoginSuccessful(content) {
+    const vm = this;
+    const { ss, chime, data: { players }, ss: { scanner, isJSON } } = vm;
+    let { badge, message } = vm;
+    let result = false;
+    if (!isJSON(content)) {
+      vm.message = 'Invalid data format. Please have team check badge...';
+      result = false;
+    } else {
+      badge = JSON.parse(content);
+      if (!vm.isBadgeValid(badge)) {
+        vm.message = "Please scan a valid player badge.";
+        result = false;
+      } else if (!vm.playerExists(badge)) {
+        vm.message = "This badge is not associated with a player account.";
+        result = false;
+      } else {
+        vm.setCurrentPlayer(badge);
+        chime.play();
+        result = true;
+        // speechSynthesis.speak(new SpeechSynthesisUtterance(`Hello, ${this.data.currentPlayer.nickname}. Identity confirmed.`));
+      }
+    }
+    return result;
   }
 
   isBadgeValid(badge) {
     return (badge.EntityType === "Badge" && badge.EntityId);
   }
 
-  setCurrentPlayer(badge){
-    const {players} = this.data;
+  playerExists(badge) {
+    return this.data.players.hasOwnProperty(badge.EntityId);
+  }
+
+  setCurrentPlayer(badge) {
+    const { players } = this.data;
     this.data.currentPlayer = players[badge.EntityId];
   }
 
-  navigateToKillScreen(){
+  navigateToKillScreen() {
     this.$location.path(`kills/${this.data.currentPlayer.id}`);
   }
 
-  playerExists(badge){
-    return this.data.players.hasOwnProperty(badge.EntityId);
-  }
 }

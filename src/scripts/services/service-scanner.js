@@ -26,13 +26,20 @@ export default class ScannerService {
     this.scanner = scanner;
   }
 
+  isJSON(str){
+    try {
+      JSON.parse(str);
+      return true;
+    } catch (error) {
+      return false;
+    }
+  }
+
   stop() {
     if (this.scanner) {
       this.scanner.stop()
         .then(() => {
-          console.log('Scanner stopped.',this.scanner);
           this.scanner = null;
-          console.log('scanner destroyed',this.scanner);
         })
         .catch((error) => {
           console.log('Scanner failed to stop.', error);

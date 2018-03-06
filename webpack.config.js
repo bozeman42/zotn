@@ -35,7 +35,7 @@ module.exports = {
         use: ['style-loader','css-loader','sass-loader']
       },
       {
-        test: /\.png$/,
+        test: /\.(png|mp3)$/,
         use: [{
           loader: 'file-loader',
           options: {

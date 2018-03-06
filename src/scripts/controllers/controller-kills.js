@@ -19,7 +19,6 @@ export default class KillController {
     const hunterMsg = "Please report any zombie kills.";
     const zombieMsg = "Turn in any hunter kills.";
     const player = this.data.player;
-    console.log('player',player);
     if (player.faction === HUNTER) {
       this.data.message = hunterMsg;
     } else if (player.faction === ZOMBIE) {
