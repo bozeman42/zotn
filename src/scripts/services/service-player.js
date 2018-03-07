@@ -1,7 +1,4 @@
-import { HUNTER, ZOMBIE } from '../constants/factions';
-import zombieIcon from '../../assets/images/zombie-icon.png';
-import hunterIcon from '../../assets/images/hunter-icon.png';
-
+import Player from '../classes/Player';
 export default class PlayerSelectController {
   constructor($http) {
     this.$inject = ['$http'];
@@ -12,7 +9,7 @@ export default class PlayerSelectController {
         playerCount: 0,
       },
       players: {},
-      currentPlayer: {}
+      currentPlayer: {},
     };
     this.$http = $http;
     this.getPlayers();
@@ -37,19 +34,14 @@ export default class PlayerSelectController {
     .then((response) => {
       const players = response.data;
       players.forEach((player) => {
-        vm.assignIcons(player);
-        vm.data.players[player.id] = player;
+        const { nickname, faction, level, id } = player;
+        console.log('player',player);
+        vm.data.players[id] = new Player(nickname,faction,level,id);
       });
+      console.log(vm.data.players);
       return vm.data.players;
     })
     .catch((error) => console.log('an error occured',error));
   }
-
-  assignIcons(player) {
-    if (player.faction === HUNTER) {
-      player.icon = hunterIcon;
-    } else if (player.faction === ZOMBIE) {
-      player.icon = zombieIcon;
-    }
-  }
 }
+
