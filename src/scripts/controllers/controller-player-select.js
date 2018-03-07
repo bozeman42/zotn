@@ -46,6 +46,7 @@ export default class PlayerSelectController {
 
   selectPlayer(player) {
     this.data.currentPlayer = player;
+    this.ss.stop();
     this.navigateToKillScreen();
   }
 

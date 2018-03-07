@@ -39,8 +39,7 @@ export default class PlayerSelectController {
       players.forEach((player) => {
         vm.assignIcons(player);
         vm.data.players[player.id] = player;
-      })
-      console.log(vm.data.players);
+      });
       return vm.data.players;
     })
     .catch((error) => console.log('an error occured',error));
