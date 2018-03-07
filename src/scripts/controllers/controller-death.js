@@ -2,6 +2,7 @@ import { HUNTER, ZOMBIE } from '../constants/factions';
 
 export default class DeathController {
   constructor($location,PlayerService){
+    this.$inject = ['$location' ,'PlayerService'];
     this.data = {};
     this.$location = $location;
     this.data.player = PlayerService.data.currentPlayer;

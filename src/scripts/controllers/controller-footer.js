@@ -1,5 +1,6 @@
 export default class {
   constructor($location,ScannerService){
+    this.$inject = ['$location', 'ScannerService'];
     this.$location = $location;
     this.ss = ScannerService;
   }

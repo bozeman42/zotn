@@ -27,14 +27,4 @@ app
   .service('ScannerService',ScannerService)
   .config(routing);
 
-// inject dependencies here ['dependency','dependency2',etc]
-PlayerService.$inject = ['$http'];
-PlayerSelectController.$inject = ['$location', '$scope', 'PlayerService', 'ScannerService'];
-KillController.$inject = ['$location', '$routeParams', 'PlayerService'];
-DeathController.$inject = ['$location' ,'PlayerService'];
-ShopController.$inject = ['$location', 'PlayerService'];
-RegisterController.$inject = ['$location', '$http', '$scope', 'PlayerService', 'ScannerService'];
-FooterController.$inject = ['$location', 'ScannerService'];
-
-
 export default app;

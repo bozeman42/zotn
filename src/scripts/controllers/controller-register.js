@@ -4,6 +4,7 @@ import scanner from '../modules/scanner';
 
 export default class PlayerSelectController {
   constructor($location, $http, $scope, PlayerService, ScannerService) {
+    this.$inject = ['$location', '$http', '$scope', 'PlayerService', 'ScannerService'];
     const vm = this;
     vm.ss = ScannerService;
     vm.$location = $location;

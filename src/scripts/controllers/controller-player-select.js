@@ -4,6 +4,7 @@ import chime from '../../assets/sounds/electronic_chime.mp3';
 
 export default class PlayerSelectController {
   constructor($location, $scope, PlayerService, ScannerService) {
+    this.$inject = ['$location', '$scope', 'PlayerService', 'ScannerService'];
     const ps = PlayerService;
     window.controller = this;
     this.ss = ScannerService;
@@ -68,9 +69,8 @@ export default class PlayerSelectController {
         vm.setCurrentPlayer(badge);
         chime.play();
         result = true;
-        const welcome = new SpeechSynthesisUtterance(`Hello, ${this.data.currentPlayer.nickname}. Identity confirmed.`)
-        welcome.pitch = 0.01;
-        speechSynthesis.speak(welcome);
+        // const welcome = new SpeechSynthesisUtterance(`Hello, ${this.data.currentPlayer.nickname}. Identity confirmed.`)
+        // speechSynthesis.speak(welcome);
       }
     }
     return result;
@@ -92,5 +92,4 @@ export default class PlayerSelectController {
   navigateToKillScreen() {
     this.$location.path(`kills/${this.data.currentPlayer.id}`);
   }
-
 }

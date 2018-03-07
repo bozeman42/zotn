@@ -2,6 +2,7 @@ import { HUNTER, ZOMBIE } from '../constants/factions';
 
 export default class KillController {
   constructor($location,$routeParams, PlayerService){
+    this.$inject = ['$location', '$routeParams', 'PlayerService'];
     this.$location = $location;
     this.data = {
       message: '',

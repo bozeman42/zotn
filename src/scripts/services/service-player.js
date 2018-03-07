@@ -4,6 +4,7 @@ import hunterIcon from '../../assets/images/hunter-icon.png';
 
 export default class PlayerSelectController {
   constructor($http) {
+    this.$inject = ['$http'];
     this.data = {
       counts: {
         zombieCount: 0,
