@@ -1,10 +1,9 @@
 import scanner from '../modules/scanner';
 import chime from '../../assets/sounds/electronic_chime.mp3';
-import { ZOMBIE, HUNTER, HUNTER_ZOMBIE_RATIO } from '../constants/factions';
 // injected dependencies:
 // PlayerService
 
-export default class PlayerSelectController {
+export default class RegisterPlayerController {
   constructor($location, $http, $scope, PlayerService, ScannerService) {
     this.$inject = ['$location', '$http', '$scope', 'PlayerService', 'ScannerService'];
     const vm = this;
@@ -13,6 +12,7 @@ export default class PlayerSelectController {
     vm.$location = $location;
     vm.$scope = $scope;
     vm.badge = null;
+    vm.chime = new Audio(chime);
     vm.data = PlayerService.data;
     vm.message = 'Please scan your Con badge...';
     vm.newPlayer = {
@@ -21,14 +21,17 @@ export default class PlayerSelectController {
       level: 1,
       id: null
     }
+    vm.enteringInfo = false;
 
     PlayerService.getCounts();
     PlayerService.getPlayers();
+    vm.startRegistrationScanner = vm.startRegistrationScanner.bind(this);
     vm.startRegistrationScanner();
   }
 
   startRegistrationScanner() {
     const vm = this;
+    console.log(this);
     console.log('start registration scanner vm:', vm);
     vm.ss.startScanner(null, vm.registerBadge.bind(vm));
   }
@@ -38,7 +41,7 @@ export default class PlayerSelectController {
     const vm = this;
     const { badge, data: { players } } = vm;
     vm.$scope.$apply(() => {
-      if (isValidNewPlayer(content)) {
+      if (this.isValidNewPlayer(content)) {
         vm.ss.stop();
         vm.getPlayerInfo();
       } else {
@@ -66,6 +69,7 @@ export default class PlayerSelectController {
         result = false;
       } else {
         chime.play();
+        vm.newPlayer.id = badge.EntityId;
         result = true;
       }
     }
@@ -95,17 +99,29 @@ export default class PlayerSelectController {
 
   getNickname() {
     const vm = this;
+    console.log(vm.newPlayer);
     vm.message = "Please enter a public nickname for this account:";
   }
 
-  getPlayerInfo() {
-    vm.player
-    const { newPlayer, data: {counts: {zombieCount,hunterCount}} } = this;
-    if (hunterCount / zombieCount < HUNTER_ZOMBIE_RATIO) {
-      newPlayer.faction = HUNTER;
-    } else {
-      newPlayer.faction = ZOMBIE;
+  submitNewPlayer(){
+    const vm = this;
+    console.log(this.newPlayer)
+    if (this.newPlayer.nickname !== '') {
+      this.ps.submitNewPlayer(this.newPlayer)
+      .then(() => {
+        vm.message = 'Player account created';
+        setTimeout(() => {
+          vm.$scope.$apply(() => {
+            vm.$location.path('/');
+          });
+        },2000);
+      });
     }
+  }
+
+  getPlayerInfo() {
+    const vm = this;
+    vm.enteringInfo = true;
     this.getNickname();
   }
 

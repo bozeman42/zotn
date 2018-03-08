@@ -69,9 +69,9 @@ export default class PlayerSelectController {
       } else {
         vm.setCurrentPlayer(badge);
         chime.play();
-        result = true;
         // const welcome = new SpeechSynthesisUtterance(`Hello, ${this.data.currentPlayer.nickname}. Identity confirmed.`)
         // speechSynthesis.speak(welcome);
+        result = true;
       }
     }
     return result;

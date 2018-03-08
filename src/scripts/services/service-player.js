@@ -1,5 +1,6 @@
 import Player from '../classes/Player';
-export default class PlayerSelectController {
+import { ZOMBIE, HUNTER, HUNTER_ZOMBIE_RATIO } from '../constants/factions';
+export default class PlayerService {
   constructor($http) {
     this.$inject = ['$http'];
     this.data = {
@@ -43,5 +44,21 @@ export default class PlayerSelectController {
     })
     .catch((error) => console.log('an error occured',error));
   }
-}
 
+  submitNewPlayer(player){
+    const {hunterCount, zombieCount} = this.data.counts;
+    if (hunterCount / zombieCount < HUNTER_ZOMBIE_RATIO) {
+      player.faction = HUNTER;
+    } else {
+      player.faction = ZOMBIE;
+    }
+    console.log('player service submit new player',player);
+    const { nickname, faction, level, id } = player;
+    const playerToSubmit = new Player(nickname, faction, level, id);
+    console.log(playerToSubmit);
+    return this.$http.post('/players/new',playerToSubmit)
+    .catch((error) => {
+      console.log(error);
+    });
+  }
+}

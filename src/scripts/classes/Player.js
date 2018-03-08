@@ -3,7 +3,7 @@ import zombieIcon from '../../assets/images/zombie-icon.png';
 import hunterIcon from '../../assets/images/hunter-icon.png';
 
 export default class Player {
-  constructor(nickname = '', faction = 1, level = 1, id) {
+  constructor(nickname = '', faction = 1, level = 1, id = null) {
     this.nickname = nickname;
     this.faction = faction;
     this.level = level;
@@ -11,7 +11,6 @@ export default class Player {
     this.icon = assignIcon(this);
     // experience?
     // inventory?
-    
   }
 }
 

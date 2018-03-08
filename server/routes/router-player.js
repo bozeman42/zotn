@@ -40,4 +40,24 @@ router.get('/counts',(req,res) => {
   })
 });
 
+router.post('/new',(req,res) => {
+  const { id, nickname, level, faction } = req.body;
+  pool.connect((connectError,client,done) => {
+    if (connectError) {
+      res.sendStatus(500);
+    } else {
+      const queryText = `INSERT INTO "players" ("id", "nickname", "faction", "level")
+      VALUES ($1,$2,$3,$4);`
+      client.query(queryText,[id, nickname, faction, level], (queryError, result) => {
+        done();
+        if (queryError) {
+          res.sendStatus(500);
+        } else {
+          res.sendStatus(201);
+        }
+      });
+    }
+  })
+})
+
 module.exports = router;
