@@ -22,24 +22,20 @@ export default class RegisterPlayerController {
       id: null
     }
     vm.enteringInfo = false;
-
-    PlayerService.getCounts();
-    PlayerService.getPlayers();
     vm.startRegistrationScanner = vm.startRegistrationScanner.bind(this);
-    vm.startRegistrationScanner();
+    Promise.all([PlayerService.getCounts(),PlayerService.getPlayers()])
+    .then(vm.startRegistrationScanner.bind(vm))
+    ;
   }
 
   startRegistrationScanner() {
     const vm = this;
     console.log(this);
-    console.log('start registration scanner vm:', vm);
     vm.ss.startScanner(null, vm.registerBadge.bind(vm));
   }
 
   registerBadge(content) {
-    console.log('this in registerBadge', this);
     const vm = this;
-    const { badge, data: { players } } = vm;
     vm.$scope.$apply(() => {
       if (this.isValidNewPlayer(content)) {
         vm.ss.stop();
@@ -105,7 +101,6 @@ export default class RegisterPlayerController {
 
   submitNewPlayer(){
     const vm = this;
-    console.log(this.newPlayer)
     if (this.newPlayer.nickname !== '') {
       this.ps.submitNewPlayer(this.newPlayer)
       .then(() => {

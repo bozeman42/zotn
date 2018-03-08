@@ -24,7 +24,6 @@ export default class PlayerService {
       vm.data.counts.hunterCount = parseInt(hunter_count);
       vm.data.counts.zombieCount = parseInt(zombie_count);
       vm.data.counts.playerCount = parseInt(player_count);
-      console.log(vm.data.counts);
     })
     .catch((error) => console.log('error getting count',error));
   }
@@ -36,10 +35,8 @@ export default class PlayerService {
       const players = response.data;
       players.forEach((player) => {
         const { nickname, faction, level, id } = player;
-        console.log('player',player);
         vm.data.players[id] = new Player(nickname,faction,level,id);
       });
-      console.log(vm.data.players);
       return vm.data.players;
     })
     .catch((error) => console.log('an error occured',error));
@@ -52,13 +49,11 @@ export default class PlayerService {
     } else {
       player.faction = ZOMBIE;
     }
-    console.log('player service submit new player',player);
     const { nickname, faction, level, id } = player;
     const playerToSubmit = new Player(nickname, faction, level, id);
-    console.log(playerToSubmit);
     return this.$http.post('/players/new',playerToSubmit)
     .catch((error) => {
-      console.log(error);
+      alert(error);
     });
   }
 }

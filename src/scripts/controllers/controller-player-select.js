@@ -16,7 +16,7 @@ export default class PlayerSelectController {
     const vm = this;
     vm.chime = new Audio(chime);
     ps.getPlayers()
-    this.startPlayerBadgeLoginScanner();
+    .then(this.startPlayerBadgeLoginScanner.bind(vm));
   }
 
   startPlayerBadgeLoginScanner() {
