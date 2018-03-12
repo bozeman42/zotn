@@ -1,7 +1,7 @@
 # Zombies of the North
 
 ## Description
-Zombies of the North is a multiplayer, hunters vs zombies game to be played at conventions. This application manages the players and all game assets.
+Zombies of the North is a multiplayer, hunters vs zombies game to be played at conventions. This application manages the players and all game assets. At this time I am not granting any license for this software. Copyright © 2018 Aaron Kvarnlov-Leverty
 
 ## Instructions
 1. run `yarn install` in the root directory
