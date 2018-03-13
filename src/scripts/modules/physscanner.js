@@ -6,6 +6,8 @@ export default class Scanner {
     this.detectRapidInput = this.detectRapidInput.bind(this);
     this.callback = callback;
     this.timeoutHandler = null;
+    this.result = '';
+    this.count = 0;
   }
 
   start() {
@@ -21,21 +23,23 @@ export default class Scanner {
   }
 
   getScannerInput() {
-    console.log('timeout happening');
-    console.log(this.inputString.length);
     if (this.inputString.length < 5) {
       console.log(`killed ${this.inputString}`)
       this.inputString = '';
       return;
     }
-    window.dispatchEvent(new CustomEvent('scan',{content: this.inputString}));
+    console.log(this.count++)
+    this.timeoutHandler = null;
+    if (this.inputString[this.inputString.length - 1] === '}'){
+      window.dispatchEvent(new CustomEvent('scan',{detail: this.inputString}));
+      this.inputString = '';
+    }
   }
 
   detectRapidInput(event) {
     event.preventDefault();
     this.inputString += event.key;
-    console.log(this.inputString);
-    this.timeoutHandler = setTimeout(this.getScannerInput, 100);
+    this.timeoutHandler = setTimeout(this.getScannerInput, 200);
   }
 
   killEvent(event) {

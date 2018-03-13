@@ -11,7 +11,7 @@ export default class ScannerService {
     this.scanner.start();
   }
 
-  isJSON(str){
+  isJSON(str) {
     try {
       JSON.parse(str);
       return true;
@@ -23,12 +23,7 @@ export default class ScannerService {
   stop() {
     if (this.scanner) {
       this.scanner.stop()
-        .then(() => {
-          this.scanner = null;
-        })
-        .catch((error) => {
-          console.log('Scanner failed to stop.', error);
-        });
+      this.scanner = null;
     }
   }
 }

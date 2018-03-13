@@ -23,8 +23,9 @@ export default class PlayerSelectController {
     const vm = this;
     vm.ss.start((content) => {
       console.log(content);
+      console.log('callback actually occurred');
       vm.$scope.$apply(() => {
-        if (vm.isLoginSuccessful(content)) {
+        if (vm.isLoginSuccessful(content.detail)) {
           vm.ss.stop();
           vm.navigateToKillScreen();
         } else {
