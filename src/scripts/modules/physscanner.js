@@ -1,3 +1,5 @@
+
+
 export default class Scanner {
   constructor(callback) {
     console.log('scanner constructed', callback);
@@ -12,6 +14,7 @@ export default class Scanner {
 
   start() {
     console.log('started', this);
+    window.addEventListener('keydown',this.handleKeydownOnlyKeys);
     window.addEventListener('keypress', this.detectRapidInput);
     window.addEventListener('scan', this.callback);
   }
@@ -28,18 +31,23 @@ export default class Scanner {
       this.inputString = '';
       return;
     }
-    console.log(this.count++)
-    this.timeoutHandler = null;
-    if (this.inputString[this.inputString.length - 1] === '}'){
       window.dispatchEvent(new CustomEvent('scan',{detail: this.inputString}));
       this.inputString = '';
+  }
+
+  handleKeydownOnlyKeys(event) {
+    if (event.key.length > 1 || event.key === ' ') {
+      event.preventDefault();
     }
   }
 
   detectRapidInput(event) {
     event.preventDefault();
+    if (this.timeoutHandler) {
+      clearTimeout(this.timeoutHandler);
+    }
     this.inputString += event.key;
-    this.timeoutHandler = setTimeout(this.getScannerInput, 200);
+    this.timeoutHandler = setTimeout(this.getScannerInput, 100);
   }
 
   killEvent(event) {

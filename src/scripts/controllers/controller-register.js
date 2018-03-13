@@ -36,6 +36,7 @@ export default class RegisterPlayerController {
 
   registerBadge(content) {
     const vm = this;
+    content = content.detail;
     vm.$scope.$apply(() => {
       if (this.isValidNewPlayer(content)) {
         vm.ss.stop();
