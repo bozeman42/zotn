@@ -1,37 +1,15 @@
-import Instascan from 'instascan';
+import Scanner from '../modules/physscanner';
 
 export default class ScannerService {
   constructor() {
     this.scanner = null;
   }
 
-  startScanner(element, callback) {
+  start(callback) {
     const vm = this;
-    try {
-      const options = {
-        scanPeriod: 60
-      }
-      if (element) {
-        options.video = document.getElementById(element)
-      }
-      let scanner = new Instascan.Scanner(options)
-      scanner.addListener('scan', callback);
-      Instascan.Camera.getCameras().then(function (cameras) {
-        if (cameras.length > 0) {
-          scanner.start(cameras[0]);
-        } else {
-          console.error('No cameras found.');
-        }
-      }).catch(function (e) {
-        console.error(e);
-      });
-      this.scanner = scanner;
-    } catch (error) {
-      console.log(error);
-      setTimeout(()=> {
-        vm.startScanner(element,callback);
-      },500);
-    }
+    this.scanner = new Scanner(callback);
+    console.log(this.scanner);
+    this.scanner.start();
   }
 
   isJSON(str){
