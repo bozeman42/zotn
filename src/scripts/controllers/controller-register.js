@@ -1,4 +1,4 @@
-import scanner from '../modules/scanner';
+import scanner from '../modules/physscanner';
 import chime from '../../assets/sounds/electronic_chime.mp3';
 // injected dependencies:
 // PlayerService
@@ -31,7 +31,7 @@ export default class RegisterPlayerController {
   startRegistrationScanner() {
     const vm = this;
     console.log(this);
-    vm.ss.startScanner(null, vm.registerBadge.bind(vm));
+    vm.ss.start(vm.registerBadge.bind(vm));
   }
 
   registerBadge(content) {

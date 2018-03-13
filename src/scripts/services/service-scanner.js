@@ -7,8 +7,7 @@ export default class ScannerService {
 
   start(callback) {
     const vm = this;
-    this.scanner = new Scanner();
-    
+    this.scanner = new Scanner(callback);
     this.scanner.start();
   }
 

@@ -22,6 +22,7 @@ export default class PlayerSelectController {
   startPlayerBadgeLoginScanner() {
     const vm = this;
     vm.ss.start((content) => {
+      console.log(content);
       vm.$scope.$apply(() => {
         if (vm.isLoginSuccessful(content)) {
           vm.ss.stop();
