@@ -18,7 +18,8 @@ export default class RegisterPlayerController {
     vm.newPlayer = {
       nickname: '',
       faction: null,
-      level: 1,
+      hunter_level: 1,
+      zombie_level: 1,
       id: null
     }
     vm.enteringInfo = false;
