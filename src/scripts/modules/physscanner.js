@@ -1,7 +1,8 @@
+import EventEmitter from 'events';
 
-
-export default class Scanner {
+export default class Scanner extends EventEmitter {
   constructor(callback) {
+    super();
     console.log('scanner constructed', callback);
     this.inputString = '';
     this.getScannerInput = this.getScannerInput.bind(this);
@@ -16,13 +17,13 @@ export default class Scanner {
     console.log('started', this);
     window.addEventListener('keydown',this.handleKeydownOnlyKeys);
     window.addEventListener('keypress', this.detectRapidInput);
-    window.addEventListener('scan', this.callback);
+    this.addListener('scan', this.callback);
   }
 
   stop() {
     console.log('stop called');
     window.removeEventListener('keypress', this.detectRapidInput);
-    window.removeEventListener('scan', this.callback);
+    this.removeListener('scan', this.callback)
   }
 
   getScannerInput() {
@@ -31,7 +32,8 @@ export default class Scanner {
       this.inputString = '';
       return;
     }
-      window.dispatchEvent(new CustomEvent('scan',{detail: this.inputString}));
+      console.log('trying to emit event');
+      this.emit('scan',this.inputString);
       this.inputString = '';
   }
 

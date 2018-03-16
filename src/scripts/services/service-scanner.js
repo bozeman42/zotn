@@ -1,4 +1,5 @@
 import Scanner from '../modules/physscanner';
+import WebcamScanner from '../modules/webcamscanner';
 
 export default class ScannerService {
   constructor() {
@@ -7,7 +8,7 @@ export default class ScannerService {
 
   start(callback) {
     const vm = this;
-    this.scanner = new Scanner(callback);
+    this.scanner = new WebcamScanner(callback);
     this.scanner.start();
   }
 

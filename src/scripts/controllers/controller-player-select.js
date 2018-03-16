@@ -23,7 +23,7 @@ export default class PlayerSelectController {
     const vm = this;
     vm.ss.start((content) => {
       vm.$scope.$apply(() => {
-        if (vm.isLoginSuccessful(content.detail)) {
+        if (vm.isLoginSuccessful(content)) {
           vm.ss.stop();
           vm.navigateToKillScreen();
         } else {

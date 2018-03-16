@@ -35,7 +35,7 @@ export default class KillController {
   startKillScanner(){
     const vm = this;
     vm.ss.start((content) => {
-      const killBadge = content.detail;
+      const killBadge = content;
       vm.$scope.$apply(() => {
         if (vm.killScanSuccessful(killBadge)) {
           vm.ss.stop();
