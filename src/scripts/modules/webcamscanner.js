@@ -29,7 +29,7 @@ export default class Scanner {
 
   stop() {
     if (this.scanner) {
-      this.scanner.stop()
+      return this.scanner.stop()
         .then(() => {
           this.scanner = null;
         })
