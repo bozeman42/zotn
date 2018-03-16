@@ -1,40 +1,25 @@
-import Instascan from 'instascan';
+import DedicatedScanner from '../modules/physscanner';
+import WebcamScanner from '../modules/webcamscanner';
+import scannerConfig, {DEDICATED_SCANNER, WEBCAM_SCANNER} from '../scanner.config';
 
 export default class ScannerService {
   constructor() {
     this.scanner = null;
   }
 
-  startScanner(element, callback) {
+  start(callback,element = null) {
     const vm = this;
-    try {
-      const options = {
-        scanPeriod: 60
-      }
-      if (element) {
-        options.video = document.getElementById(element)
-      }
-      let scanner = new Instascan.Scanner(options)
-      scanner.addListener('scan', callback);
-      Instascan.Camera.getCameras().then(function (cameras) {
-        if (cameras.length > 0) {
-          scanner.start(cameras[0]);
-        } else {
-          console.error('No cameras found.');
-        }
-      }).catch(function (e) {
-        console.error(e);
-      });
-      this.scanner = scanner;
-    } catch (error) {
-      console.log(error);
-      setTimeout(()=> {
-        vm.startScanner(element,callback);
-      },500);
+    if (scannerConfig.type === DEDICATED_SCANNER){
+      this.scanner = new DedicatedScanner(callback);
+    } else if (scannerConfig.type === WEBCAM_SCANNER){
+      this.scanner = new WebcamScanner(callback,element);
+    } else {
+      console.error("Unknown scanner type. Please check scanner.config.js");
     }
+    this.scanner.start();
   }
 
-  isJSON(str){
+  isJSON(str) {
     try {
       JSON.parse(str);
       return true;
@@ -46,12 +31,7 @@ export default class ScannerService {
   stop() {
     if (this.scanner) {
       this.scanner.stop()
-        .then(() => {
-          this.scanner = null;
-        })
-        .catch((error) => {
-          console.log('Scanner failed to stop.', error);
-        });
+      this.scanner = null;
     }
   }
 }

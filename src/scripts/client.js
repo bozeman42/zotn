@@ -4,6 +4,7 @@ import PlayerSelectController from './controllers/controller-player-select';
 import Controller404 from './controllers/controller-404';
 import PlayerService from './services/service-player';
 import ScannerService from './services/service-scanner';
+import FactionService from './services/service-faction';
 import KillController from './controllers/controller-kills';
 import DeathController from './controllers/controller-death';
 import ShopController from './controllers/controller-shop';
@@ -25,6 +26,7 @@ app
   .controller('RegisterController',RegisterController)
   .service('PlayerService',PlayerService)
   .service('ScannerService',ScannerService)
+  .service('FactionService',FactionService)
   .config(routing);
 
 export default app;

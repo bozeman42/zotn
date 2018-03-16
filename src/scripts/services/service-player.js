@@ -50,10 +50,14 @@ export default class PlayerService {
       player.faction = ZOMBIE;
     }
     const { nickname, faction, level, id } = player;
-    const playerToSubmit = new Player(nickname, faction, level, id);
+    const playerToSubmit = new Player(nickname, faction, hLevel,zLevel, id);
     return this.$http.post('/players/new',playerToSubmit)
     .catch((error) => {
       alert(error);
     });
+  }
+
+  creditKill(player){
+    console.log('playerService creditKill player:',player);
   }
 }

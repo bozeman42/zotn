@@ -1,4 +1,4 @@
-import scanner from '../modules/scanner';
+import scanner from '../modules/physscanner';
 import chime from '../../assets/sounds/electronic_chime.mp3';
 // injected dependencies:
 // PlayerService
@@ -18,7 +18,8 @@ export default class RegisterPlayerController {
     vm.newPlayer = {
       nickname: '',
       faction: null,
-      level: 1,
+      hunter_level: 1,
+      zombie_level: 1,
       id: null
     }
     vm.enteringInfo = false;
@@ -31,7 +32,7 @@ export default class RegisterPlayerController {
   startRegistrationScanner() {
     const vm = this;
     console.log(this);
-    vm.ss.startScanner(null, vm.registerBadge.bind(vm));
+    vm.ss.start(vm.registerBadge.bind(vm));
   }
 
   registerBadge(content) {
