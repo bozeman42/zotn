@@ -1,6 +1,6 @@
 import EventEmitter from 'events';
 
-export default class Scanner extends EventEmitter {
+export default class DedicatedScanner extends EventEmitter {
   constructor(callback) {
     super();
     console.log('scanner constructed', callback);
@@ -25,6 +25,15 @@ export default class Scanner extends EventEmitter {
     window.removeEventListener('keypress', this.detectRapidInput);
     this.removeListener('scan', this.callback)
   }
+  
+  detectRapidInput(event) {
+    event.preventDefault();
+    if (this.timeoutHandler) {
+      clearTimeout(this.timeoutHandler);
+    }
+    this.inputString += event.key;
+    this.timeoutHandler = setTimeout(this.getScannerInput, 100);
+  }
 
   getScannerInput() {
     if (this.inputString.length < 5) {
@@ -41,15 +50,6 @@ export default class Scanner extends EventEmitter {
     if (event.key.length > 1 || event.key === ' ') {
       event.preventDefault();
     }
-  }
-
-  detectRapidInput(event) {
-    event.preventDefault();
-    if (this.timeoutHandler) {
-      clearTimeout(this.timeoutHandler);
-    }
-    this.inputString += event.key;
-    this.timeoutHandler = setTimeout(this.getScannerInput, 100);
   }
 
   killEvent(event) {
