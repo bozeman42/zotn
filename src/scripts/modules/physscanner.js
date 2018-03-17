@@ -22,6 +22,7 @@ export default class DedicatedScanner extends EventEmitter {
     return new Promise((resolve) => {
       try {
         window.removeEventListener('keypress', this.detectRapidInput);
+        window.removeEventListener('keydown', this.handleKeydownOnlyKeys);
         this.removeListener('scan', this.callback)
         resolve("Stopped");
       } catch (error) {

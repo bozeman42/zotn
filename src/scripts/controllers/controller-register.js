@@ -4,8 +4,8 @@ import chime from '../../assets/sounds/electronic_chime.mp3';
 // PlayerService
 
 export default class RegisterPlayerController {
-  constructor($location, $http, $scope, PlayerService, ScannerService) {
-    this.$inject = ['$location', '$http', '$scope', 'PlayerService', 'ScannerService'];
+  constructor($location, $http, $scope, PlayerService, ScannerService, FactionService) {
+    this.$inject = ['$location', '$http', '$scope', 'PlayerService', 'ScannerService','FactionService'];
     const vm = this;
     vm.ss = ScannerService;
     vm.ps = PlayerService;

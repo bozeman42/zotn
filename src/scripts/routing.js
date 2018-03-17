@@ -4,6 +4,7 @@ import '../views/templates/kills.html';
 import '../views/templates/death.html';
 import '../views/templates/shop.html';
 import '../views/templates/register.html';
+import '../views/templates/register-asset.html';
 import '../views/templates/404.html';
 import '../views/partials/footer.html';
 
@@ -29,6 +30,10 @@ export default function ($routeProvider, $locationProvider) {
     .when('/register', {
       templateUrl: '/views/templates/register.html',
       controller: 'RegisterController as rc'
+    })
+    .when('/register-asset', {
+      templateUrl: '/views/templates/register-asset.html',
+      controller: 'RegisterAssetController as rc'
     })
     .when('/notfound', {
       templateUrl: '/views/templates/404.html',

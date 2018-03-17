@@ -1,4 +1,16 @@
+
+// faction / faction_id
 export const HUNTER = 1;
 export const ZOMBIE = 2;
-export const NO_VIDEO = null;
+
+// desired ratio of Hunters: Zombies at player creation
 export const HUNTER_ZOMBIE_RATIO = 4;
+
+// Entity Types
+export const BULLET = "Bullet";
+export const BITE = "Bite";
+export const FACTION_LANYARD = "FactionLanyard";
+
+
+//webcam scanner video preview element
+export const NO_VIDEO = null;
