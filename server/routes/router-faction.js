@@ -6,6 +6,8 @@ router.put('/killed',(req,res) => {
   res.send('woop!');
 })
 
+
+// get all faction lanyards
 router.get('/badges',(req,res) => {
   pool.connect((connectError,client,done) => {
     if (connectError) {
@@ -30,6 +32,8 @@ router.get('/badges',(req,res) => {
   })
 })
 
+
+// get all faction lanyards that are not assigned to players
 router.get('/badges/unassigned',(req,res) => {
   pool.connect((connectError,client,done) => {
     if (connectError) {
@@ -54,6 +58,7 @@ router.get('/badges/unassigned',(req,res) => {
   })
 })
 
+// get all faction lanyards that are assigned to players
 router.get('/badges/assigned',(req,res) => {
   pool.connect((connectError,client,done) => {
     if (connectError) {
@@ -78,6 +83,8 @@ router.get('/badges/assigned',(req,res) => {
   })
 });
 
+
+// register new faction lanyard
 router.post('/badges',(req,res) => {
   const {EntityId, Faction, Level} = req.query;
   console.log(EntityId,Faction,Level);

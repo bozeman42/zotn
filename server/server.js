@@ -16,6 +16,6 @@ app.use(bodyParser.json());
 
 app.use('/players',playerRouter);
 app.use('/faction',factionRouter);
-app.use('/assets',factionRouter);
+app.use('/assets',assetRouter);
 
 app.listen(PORT,() => console.log(`Listening on port ${PORT}...`))
