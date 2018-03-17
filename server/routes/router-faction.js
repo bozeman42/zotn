@@ -76,6 +76,34 @@ router.get('/badges/assigned',(req,res) => {
       })
     }
   })
-})
+});
+
+router.post('/badges',(req,res) => {
+  const {EntityId, Faction, Level} = req.query;
+  console.log(EntityId,Faction,Level);
+  pool.connect((connectError,client,done) => {
+    if (connectError) {
+      res.status(500).send({
+        message: "Database connect error",
+        error: connectError
+      });
+    } else {
+      let queryData = [EntityId, Faction, Level];
+      let queryString = `INSERT INTO "faction_lanyards" ("id","faction_id","level")
+      VALUES ($1,$2,$3);`;
+      client.query(queryString,queryData,(queryError,result) =>{
+        done();
+        if (queryError) {
+          res.status(500).send({
+            message: "Database query error",
+            error: queryError
+          });
+        } else {
+          res.sendStatus(201);
+        }
+      })
+    }
+  })
+});
 
 module.exports = router;
