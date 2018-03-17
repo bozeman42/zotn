@@ -29,9 +29,15 @@ export default class ScannerService {
   }
 
   stop() {
-    if (this.scanner) {
-      this.scanner.stop()
-      this.scanner = null;
+    const vm = this;
+    if (vm.scanner) {
+      return vm.scanner.stop()
+      .then(() => {
+        vm.scanner = null;
+      })
+      .catch((error) => {
+        alert('Failed to stop',error);
+      });
     }
   }
 }

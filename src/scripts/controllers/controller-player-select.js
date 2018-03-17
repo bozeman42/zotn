@@ -15,8 +15,9 @@ export default class PlayerSelectController {
     this.$scope = $scope;
     const vm = this;
     vm.chime = new Audio(chime);
+    this.navigateToKillScreen = this.navigateToKillScreen.bind(this);
     ps.getPlayers()
-    .then(this.startPlayerBadgeLoginScanner.bind(vm));
+      .then(this.startPlayerBadgeLoginScanner.bind(vm));
   }
 
   startPlayerBadgeLoginScanner() {
@@ -24,8 +25,8 @@ export default class PlayerSelectController {
     vm.ss.start((content) => {
       vm.$scope.$apply(() => {
         if (vm.isLoginSuccessful(content)) {
-          vm.ss.stop();
-          vm.navigateToKillScreen();
+          vm.ss.stop()
+            .then(() => vm.navigateToKillScreen())
         } else {
           vm.ss.stop()
           vm.resetScanner();
@@ -45,9 +46,10 @@ export default class PlayerSelectController {
   }
 
   selectPlayer(player) {
-    this.data.currentPlayer = player;
-    this.ss.stop();
-    this.navigateToKillScreen();
+    const vm = this;
+    vm.data.currentPlayer = player;
+    vm.ss.stop()
+      .then(() => vm.navigateToKillScreen())
   }
 
   isLoginSuccessful(content) {
@@ -91,6 +93,9 @@ export default class PlayerSelectController {
   }
 
   navigateToKillScreen() {
-    this.$location.path(`kills/${this.data.currentPlayer.id}`);
+    const vm = this;
+    vm.$scope.$apply(() => {
+      vm.$location.path(`kills/${vm.data.currentPlayer.id}`);
+    })
   }
 }

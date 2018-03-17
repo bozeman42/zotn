@@ -4,8 +4,8 @@ import chime from '../../assets/sounds/electronic_chime.mp3';
 // PlayerService
 
 export default class RegisterPlayerController {
-  constructor($location, $http, $scope, PlayerService, ScannerService) {
-    this.$inject = ['$location', '$http', '$scope', 'PlayerService', 'ScannerService'];
+  constructor($location, $http, $scope, PlayerService, ScannerService, FactionService) {
+    this.$inject = ['$location', '$http', '$scope', 'PlayerService', 'ScannerService','FactionService'];
     const vm = this;
     vm.ss = ScannerService;
     vm.ps = PlayerService;
@@ -23,8 +23,9 @@ export default class RegisterPlayerController {
       id: null
     }
     vm.enteringInfo = false;
+    vm.assignFactionBadge = vm.assignFactionBadge.bind(this);
     vm.startRegistrationScanner = vm.startRegistrationScanner.bind(this);
-    Promise.all([PlayerService.getCounts(),PlayerService.getPlayers()])
+    Promise.all([PlayerService.getCounts(),PlayerService.getPlayers(),FactionService.getFactionBadges()])
     .then(vm.startRegistrationScanner.bind(vm))
     ;
   }
@@ -39,13 +40,30 @@ export default class RegisterPlayerController {
     const vm = this;
     vm.$scope.$apply(() => {
       if (this.isValidNewPlayer(content)) {
-        vm.ss.stop();
+        vm.ss.stop()
+        .then(() => {
+          vm.assignFactionBadge();
+        })
         vm.getPlayerInfo();
       } else {
         vm.ss.stop();
         vm.resetScanner(vm.startRegistrationScanner);
       }
     });
+  }
+
+  assignFactionBadge(){
+    const vm = this;
+    vm.ss.start(vm.scanFactionBadge.bind(vm));
+  }
+
+  scanFactionBadge(content){
+    const vm = this;
+    vm.$scope.$apply(() => {
+      if (vm.isValidFactionBadge(content)){
+
+      }
+    })
   }
 
   isValidNewPlayer(content) {
@@ -75,6 +93,11 @@ export default class RegisterPlayerController {
     }
     return result;
   }
+
+  // isValidFactionBadge(content) {
+  //   const vm = this;
+  //   const { ss, chime}
+  // }
 
   resetScanner(scannerFunction) {
     const vm = this;

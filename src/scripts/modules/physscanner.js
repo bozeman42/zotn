@@ -3,7 +3,6 @@ import EventEmitter from 'events';
 export default class DedicatedScanner extends EventEmitter {
   constructor(callback) {
     super();
-    console.log('scanner constructed', callback);
     this.inputString = '';
     this.getScannerInput = this.getScannerInput.bind(this);
     this.detectRapidInput = this.detectRapidInput.bind(this);
@@ -14,16 +13,22 @@ export default class DedicatedScanner extends EventEmitter {
   }
 
   start() {
-    console.log('started', this);
     window.addEventListener('keydown',this.handleKeydownOnlyKeys);
     window.addEventListener('keypress', this.detectRapidInput);
     this.addListener('scan', this.callback);
   }
 
   stop() {
-    console.log('stop called');
-    window.removeEventListener('keypress', this.detectRapidInput);
-    this.removeListener('scan', this.callback)
+    return new Promise((resolve) => {
+      try {
+        window.removeEventListener('keypress', this.detectRapidInput);
+        window.removeEventListener('keydown', this.handleKeydownOnlyKeys);
+        this.removeListener('scan', this.callback)
+        resolve("Stopped");
+      } catch (error) {
+        reject(error);
+      }
+    })
   }
   
   detectRapidInput(event) {
@@ -37,11 +42,9 @@ export default class DedicatedScanner extends EventEmitter {
 
   getScannerInput() {
     if (this.inputString.length < 5) {
-      console.log(`killed ${this.inputString}`)
       this.inputString = '';
       return;
     }
-      console.log('trying to emit event');
       this.emit('scan',this.inputString);
       this.inputString = '';
   }

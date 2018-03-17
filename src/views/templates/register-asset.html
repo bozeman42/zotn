@@ -1,0 +1,8 @@
+<h1>rc.message</h1>
+<div>
+  <form ng-submit="rc.submitNewPlayer()" ng-if="rc.enteringInfo">
+    <label for="nickname"></label>
+    <input type="text" id="nickname" placeholder="Player nickname..." ng-model="rc.newPlayer.nickname">
+    <button type="submit">SUBMIT</button>
+  </form>
+</div>
