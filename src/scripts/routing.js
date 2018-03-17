@@ -33,7 +33,7 @@ export default function ($routeProvider, $locationProvider) {
     })
     .when('/register-asset', {
       templateUrl: '/views/templates/register-asset.html',
-      controller: 'RegisterAssetController as rc'
+      controller: 'RegisterAssetController as arc'
     })
     .when('/notfound', {
       templateUrl: '/views/templates/404.html',
