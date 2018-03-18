@@ -1,6 +1,6 @@
 export default class RegisterAssetController {
   constructor($location,$scope,AssetService,ScannerService){
-    this.$inject(['$location','$scope','AssetService','ScannerService']);
+    this.$inject = ['$location','$scope','AssetService','ScannerService'];
     this.message = "Please scan an asset to register.";
     this.as = AssetService;
     this.ss = ScannerService;
@@ -24,7 +24,6 @@ export default class RegisterAssetController {
     let result = false;
     
   }
-
 
   updateAssets(){
     this.as.getAssets();

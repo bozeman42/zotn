@@ -1,8 +1,9 @@
-export default class RegisterAssetService {
+export default class AssetService {
   constructor($http, FactionService){
     const vm = this;
-    const fs = FactionService;
-    vm.$inject(['$http','FactionService'])
+    this.fs = FactionService;
+    vm.$inject = ['$http','FactionService'];
+    vm.$http = $http;
     vm.data = {
       currentAsset: {
 
@@ -23,7 +24,7 @@ export default class RegisterAssetService {
 
   getAssets(){
     const vm = this;
-    return Promise.all(vm.getBullets(),vm.getBites(),vm.getBoons(),vm.getFactionBadges());
+    return Promise.all([vm.getBullets(),vm.getBites(),vm.getBoons(),vm.getFactionBadges()]);
   }
 
   getBullets() {
@@ -33,7 +34,10 @@ export default class RegisterAssetService {
       const bullets = response.data;
       console.log(bullets);
       vm.buildObject("bullets",'bullet_id',bullets);
-    });
+    })
+    .catch((error) => {
+      console.error(error);
+    })
   }
 
   getBites() {
@@ -43,7 +47,10 @@ export default class RegisterAssetService {
       const bites = response.data;
       vm.buildObject("bites","bite_id",bites);
       console.log(bites);
-    });
+    })
+    .catch((error) => {
+      console.error(error);
+    })
   }
 
   getBoons() {
@@ -54,14 +61,20 @@ export default class RegisterAssetService {
       console.log(boons);
       vm.buildObject("boons","card_id",boons);
     })
+    .catch((error) => {
+      console.error(error);
+    })
   }
   
   getFactionBadges(){
     const vm = this;
-    return fs.getFactionBadges()
+    return vm.fs.getFactionBadges()
     .then((badges) => {
       vm.data.badges = badges
       return vm.data.badges;
+    })
+    .catch((error) => {
+      console.error(error);
     })
   }
 

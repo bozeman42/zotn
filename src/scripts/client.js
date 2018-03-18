@@ -26,6 +26,7 @@ app
   .controller('FooterController',FooterController)
   .controller('ShopController',ShopController)
   .controller('RegisterController',RegisterController)
+  .controller('RegisterAssetController',RegisterAssetController)
   .service('PlayerService',PlayerService)
   .service('ScannerService',ScannerService)
   .service('FactionService',FactionService)
