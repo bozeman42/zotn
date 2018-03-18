@@ -6,7 +6,6 @@ export default class AssetService {
     vm.$http = $http;
     vm.data = {
       currentAsset: {
-
       },
       assets: {
         bullets: {},
@@ -32,7 +31,6 @@ export default class AssetService {
     return vm.$http.get('/assets/bullets')
     .then((response) => {
       const bullets = response.data;
-      console.log(bullets);
       vm.buildObject("bullets",'bullet_id',bullets);
     })
     .catch((error) => {
@@ -46,7 +44,6 @@ export default class AssetService {
     .then((response) => {
       const bites = response.data;
       vm.buildObject("bites","bite_id",bites);
-      console.log(bites);
     })
     .catch((error) => {
       console.error(error);
@@ -58,7 +55,6 @@ export default class AssetService {
     return vm.$http.get('/assets/boons')
     .then((response) => {
       const boons = response.data;
-      console.log(boons);
       vm.buildObject("boons","card_id",boons);
     })
     .catch((error) => {
@@ -70,8 +66,7 @@ export default class AssetService {
     const vm = this;
     return vm.fs.getFactionBadges()
     .then((badges) => {
-      vm.data.badges = badges
-      return vm.data.badges;
+      vm.data.assets.factionLanyards = badges;
     })
     .catch((error) => {
       console.error(error);
@@ -82,9 +77,10 @@ export default class AssetService {
   buildObject(assetType,idName,data){
     const vm = this;
     data.forEach((item) => {
-      vm.assets[assetType][idName] = item;
+      vm.data.assets[assetType][idName] = item;
     })
   }
 
+  
 
 }

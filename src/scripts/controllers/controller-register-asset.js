@@ -26,6 +26,7 @@ export default class RegisterAssetController {
   }
 
   updateAssets(){
+    console.log('Getting assets');
     this.as.getAssets();
   }
 }

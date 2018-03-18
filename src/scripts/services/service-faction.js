@@ -6,7 +6,6 @@ export default class FactionService {
     this.$http = $http;
     this.data = {
       badges: {}
-
     };
   }
   processKilledLanyard(badge){
@@ -20,7 +19,6 @@ export default class FactionService {
     const vm = this;
     return this.$http.get('/faction/badges/unassigned')
     .then((response) => {
-      console.log(response);
       const badges = response.data;
       badges.forEach((badge) => {
         vm.data.badges.unassigned[badge.id] = badge;
@@ -33,7 +31,6 @@ export default class FactionService {
     const vm = this;
     return this.$http.get('/faction/badges/')
     .then((response) => {
-      console.log(response);
       const badges = response.data;
       badges.forEach((badge) => {
         vm.data.badges[badge.id] = badge;

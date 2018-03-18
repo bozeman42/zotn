@@ -34,7 +34,6 @@ export default class PlayerService {
     .then((response) => {
       const players = response.data;
       players.forEach((player) => {
-        console.log(player);
         const { faction, id, nickname,zombie_level,hunter_level,credits,score,xp } = player;
         vm.data.players[id] = new Player(faction, id, nickname,zombie_level,hunter_level,credits,score,xp);
       });
