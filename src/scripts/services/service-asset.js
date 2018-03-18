@@ -1,7 +1,8 @@
 export default class RegisterAssetService {
-  constructor($http){
+  constructor($http, FactionService){
     const vm = this;
-    vm.$inject(['$http'])
+    const fs = FactionService;
+    vm.$inject(['$http','FactionService'])
     vm.data = {
       currentAsset: {
 
@@ -13,7 +14,16 @@ export default class RegisterAssetService {
         factionLanyards: {}
       }
     }
-    vm.getAssets();
+    this.buildObject = this.buildObject.bind(this);
+    vm.getAssets()
+    .then(() => {
+      console.log("Asset data:",vm.data);
+    })
+  }
+
+  getAssets(){
+    const vm = this;
+    return Promise.all(vm.getBullets(),vm.getBites(),vm.getBoons(),vm.getFactionBadges());
   }
 
   getBullets() {
@@ -22,6 +32,7 @@ export default class RegisterAssetService {
     .then((response) => {
       const bullets = response.data;
       console.log(bullets);
+      vm.buildObject("bullets",'bullet_id',bullets);
     });
   }
 
@@ -30,6 +41,7 @@ export default class RegisterAssetService {
     return vm.$http.get('/assets/bites')
     .then((response) => {
       const bites = response.data;
+      vm.buildObject("bites","bite_id",bites);
       console.log(bites);
     });
   }
@@ -40,15 +52,26 @@ export default class RegisterAssetService {
     .then((response) => {
       const boons = response.data;
       console.log(boons);
-      // vm.buildObject("boons",boons).bind(vm);
+      vm.buildObject("boons","card_id",boons);
+    })
+  }
+  
+  getFactionBadges(){
+    const vm = this;
+    return fs.getFactionBadges()
+    .then((badges) => {
+      vm.data.badges = badges
+      return vm.data.badges;
     })
   }
 
-  buildObject(assetType,data){
+
+  buildObject(assetType,idName,data){
     const vm = this;
     data.forEach((item) => {
-      vm.assets[assetType]
+      vm.assets[assetType][idName] = item;
     })
   }
+
 
 }

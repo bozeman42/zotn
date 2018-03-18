@@ -54,7 +54,7 @@ export default class PlayerSelectController {
 
   isLoginSuccessful(content) {
     const vm = this;
-    const { ss, chime, data: { players }, ss: { scanner, isJSON } } = vm;
+    const { ss, chime, data: { players }, ss: { isJSON } } = vm;
     let { badge, message } = vm;
     let result = false;
     if (!isJSON(content)) {
