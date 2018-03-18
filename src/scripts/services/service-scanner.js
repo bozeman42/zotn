@@ -47,6 +47,7 @@ export default class ScannerService {
   }
 
   stop() {
+    console.log('stopping scanner');
     const vm = this;
     if (vm.scanner) {
       return vm.scanner.stop()

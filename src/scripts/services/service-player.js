@@ -34,8 +34,9 @@ export default class PlayerService {
     .then((response) => {
       const players = response.data;
       players.forEach((player) => {
-        const { nickname, faction, level, id } = player;
-        vm.data.players[id] = new Player(nickname,faction,level,id);
+        console.log(player);
+        const { faction, id, nickname,zombie_level,hunter_level,credits,score,xp } = player;
+        vm.data.players[id] = new Player(faction, id, nickname,zombie_level,hunter_level,credits,score,xp);
       });
       return vm.data.players;
     })
@@ -49,11 +50,11 @@ export default class PlayerService {
     } else {
       player.faction = ZOMBIE;
     }
-    const { nickname, faction, level, id } = player;
-    const playerToSubmit = new Player(nickname, faction, hLevel,zLevel, id);
+    const { nickname, faction, id } = player;
+    const playerToSubmit = new Player(faction, id, nickname);
     return this.$http.post('/players/new',playerToSubmit)
     .catch((error) => {
-      alert(error);
+      console.error(error);
     });
   }
 

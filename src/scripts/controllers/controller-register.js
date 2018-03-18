@@ -41,9 +41,6 @@ export default class RegisterPlayerController {
     vm.$scope.$apply(() => {
       if (this.isValidNewPlayer(content)) {
         vm.ss.stop()
-          .then(() => {
-            vm.assignFactionBadge();
-          })
         vm.getPlayerInfo();
       } else {
         vm.ss.stop();
