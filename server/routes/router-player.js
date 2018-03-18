@@ -4,13 +4,19 @@ const pool = require('../modules/pool');
 router.get('/',(req,res) => {
   pool.connect((connectError,client,done) => {
     if (connectError) {
-      res.sendStatus(500);
+      res.status(500).send({
+        message: 'Database connection error',
+        error: connectError
+      });
     } else {
       const queryText = 'SELECT * FROM players';
       client.query(queryText,(queryError,result) => {
         done();
         if (queryError) {
-          res.sendStatus(500);
+          res.status(500).send({
+            message: "Database Query Error",
+            error: queryError
+          });
         } else {
           res.send(result.rows);
         }
