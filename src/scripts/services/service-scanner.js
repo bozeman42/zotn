@@ -5,12 +5,15 @@ import scannerConfig, {DEDICATED_SCANNER, WEBCAM_SCANNER} from '../scanner.confi
 export default class ScannerService {
   constructor() {
     this.scanner = null;
-    this.validateJSON = this.validateJSON.bind(this);
+    this.validateAndParseJSON = this.validateAndParseJSON.bind(this);
   }
 
+
+  // Callbacks should now expect JavaScript objects as arguments. Scanner input is
+  // validated as JSON and parsed into JS objects before being passed to callbacks.
   start(callback,element = null) {
     const vm = this;
-    const validatedCallback = vm.validateJSON(callback);
+    const validatedCallback = vm.validateAndParseJSON(callback);
     if (scannerConfig.type === DEDICATED_SCANNER){
       this.scanner = new DedicatedScanner(validatedCallback);
     } else if (scannerConfig.type === WEBCAM_SCANNER){
@@ -21,15 +24,18 @@ export default class ScannerService {
     this.scanner.start();
   }
 
-  validateJSON(callback){
+  // accept a callback function and return a function that verifies that the input is JSON
+  // and parses it into an object before calling the callback with that data.
+  validateAndParseJSON(callback){
     const vm = this;
     return function(content){
       if(vm.isJSON(content)){
-        callback(content);
+        callback(JSON.parse(content));
       }
     }
   }
 
+  
   isJSON(str) {
     try {
       JSON.parse(str);

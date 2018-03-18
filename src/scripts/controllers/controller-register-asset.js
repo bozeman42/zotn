@@ -22,7 +22,7 @@ export default class RegisterAssetController {
     const vm = this;
     const { ss, ss: { isJSON }} = vm;
     let result = false;
-    if (!isJSON()){}
+    
   }
 
 
