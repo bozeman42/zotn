@@ -77,7 +77,7 @@ export default class AssetService {
   buildObject(assetType, idName, data) {
     const vm = this;
     data.forEach((item) => {
-      vm.data.assets[assetType][idName] = item;
+      vm.data.assets[assetType][item[idName]] = item;
     })
   }
 
