@@ -5,6 +5,9 @@ export default class DedicatedScanner extends EventEmitter {
     super();
     this.inputString = '';
     console.log('The listeners are bound.');
+    this.handleKeydownOnlyKeys = this.handleKeydownOnlyKeys.bind(this);
+    this.detectRapidInput = this.detectRapidInput.bind(this);
+    this.getScannerInput = this.getScannerInput.bind(this);
     this.callback = callback;
     this.timeoutHandler = null;
     this.result = '';

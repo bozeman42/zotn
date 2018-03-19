@@ -5,6 +5,7 @@ export default class RegisterAssetController {
     this.as = AssetService;
     this.ss = ScannerService;
     this.data = this.as.data.assets;
+    this.registerAsset = this.registerAsset.bind(this);
     this.updateAssets();
     this.startAssetRegistrationScanner();
   }
@@ -12,17 +13,16 @@ export default class RegisterAssetController {
   startAssetRegistrationScanner(){
     const vm = this;
     this.ss.start((content) => {
-      if (this.isValidAsset(content)){
-
+      console.log("Asset Registration callback called");
+      if (content.EntityType) {
+        vm.registerAsset(content);
       }
     })
   }
 
-  isValidAsset(content){
+  registerAsset(content){
     const vm = this;
-    const { ss, ss: { isJSON }} = vm;
-    let result = false;
-    
+    vm.as.registerAsset(content);
   }
 
   updateAssets(){

@@ -1,118 +1,24 @@
 const router = require('express').Router();
 const pool = require('../modules/pool');
+const boons = require('../modules/boons');
 // {"EntityType":"Bullet","EntityId":1}
 // {"EntityType":"Boon","EntityId":9,"BoonId": 2}
 // {"EntityType":"Bite","EntityId":8}
 
 router.get('/boons',(req,res) => {
-  pool.connect((connectError,client,done) => {
-    if (connectError) {
-      res.status(500).send({
-        message:"Error connecting to database",
-        error: connectError
-      });
-    } else {
-      const queryText = `SELECT * FROM "boon_cards"
-                          JOIN "boons" ON "boon_cards"."boon_id" = "boons"."boon_id"
-                          ORDER BY "card_id";`;
-      client.query(queryText,(queryError,result) => {
-        done();
-        if (queryError) {
-          res.status(500).send({
-            message:"Error querying database",
-            error: queryError
-          });
-        } else {
-          res.send(result.rows);
-        }
-      })
-    }
-  })
+  boons.get(req,res);
 });
 
-// remove player from boon
-// query params: card_id
-
-
 router.put('/boons/attach',(req,res) => {
-  const { EntityId, PlayerId } = req.query;
-  pool.connect((connectError,client,done) => {
-    if (connectError) {
-      res.status(500).send({
-        message:"Error connecting to database",
-        error: connectError
-      });
-    } else {
-      const queryText = `UPDATE "boon_cards"
-                          SET "player_id" = $2
-                          WHERE "card_id" = $1;`;
-      client.query(queryText,[EntityId,PlayerId],(queryError,result) => {
-        done();
-        if (queryError) {
-          res.status(500).send({
-            message:"Error querying database",
-            error: queryError
-          });
-        } else {
-          res.sendStatus(204);
-        }
-      })
-    }
-  })
+  boons.attach(req,res);
 });
 
 router.put('/boons/detach',(req,res) => {
-  const {EntityId} = req.query;
-  pool.connect((connectError,client,done) => {
-    if (connectError) {
-      res.status(500).send({
-        message:"Error connecting to database",
-        error: connectError
-      });
-    } else {
-      const queryText = `UPDATE "boon_cards"
-                          SET "player_id" = NULL
-                          WHERE "card_id" = $1;`;
-      client.query(queryText,[EntityId],(queryError,result) => {
-        done();
-        if (queryError) {
-          res.status(500).send({
-            message:"Error querying database",
-            error: queryError
-          });
-        } else {
-          res.sendStatus(204);
-        }
-      })
-    }
-  })
-})
+  boons.detach(req,res);
+});
 
 router.post('/boons', (req, res) => {
-  const { EntityId, BoonId } = req.query;
-  let queryData = [EntityId, BoonId];
-  let queryString = `INSERT INTO "boon_cards" ("card_id","boon_id")
-    VALUES ($1,$2);`;
-  pool.connect((connectError, client, done) => {
-    if (connectError) {
-      res.status(500).send({
-        message: "Database connect error",
-        error: connectError
-      });
-    } else {
-      client.query(queryString, queryData, (queryError, result) => {
-        done();
-        if (queryError) {
-          res.status(500).send({
-            message: "Database query error",
-            error: queryError
-          });
-        } else {
-          res.sendStatus(201);
-        }
-      })
-    }
-  })
+  boons.post(req,res);
 });
 
 
@@ -146,7 +52,7 @@ router.get('/bullets',(req,res) => {
 });
 
 router.put('/bullets/attach',(req,res) => {
-  const { EntityId, PlayerId } = req.query;
+  const { EntityId, PlayerId } = req.body;
   pool.connect((connectError,client,done) => {
     if (connectError) {
       res.status(500).send({
@@ -173,7 +79,7 @@ router.put('/bullets/attach',(req,res) => {
 });
 
 router.put('/bullets/detach',(req,res) => {
-  const {EntityId} = req.query;
+  const {EntityId} = req.body;
   pool.connect((connectError,client,done) => {
     if (connectError) {
       res.status(500).send({
@@ -200,7 +106,7 @@ router.put('/bullets/detach',(req,res) => {
 })
 
 router.post('/bullets', (req, res) => {
-  const { EntityId } = req.query;
+  const { EntityId } = req.body;
   let queryData = [EntityId];
   let queryString = `INSERT INTO "bullets" ("bullet_id")
     VALUES ($1);`;
@@ -256,7 +162,7 @@ router.get('/bites',(req,res) => {
 });
 
 router.put('/bites/attach',(req,res) => {
-  const { EntityId, PlayerId } = req.query;
+  const { EntityId, PlayerId } = req.body;
   pool.connect((connectError,client,done) => {
     if (connectError) {
       res.status(500).send({
@@ -283,7 +189,7 @@ router.put('/bites/attach',(req,res) => {
 });
 
 router.put('/bites/detach',(req,res) => {
-  const {EntityId} = req.query;
+  const {EntityId} = req.body;
   pool.connect((connectError,client,done) => {
     if (connectError) {
       res.status(500).send({
@@ -310,7 +216,7 @@ router.put('/bites/detach',(req,res) => {
 })
 
 router.post('/bites', (req, res) => {
-  const { EntityId } = req.query;
+  const { EntityId } = req.body;
   let queryData = [EntityId];
   let queryString = `INSERT INTO "bites" ("bite_id")
     VALUES ($1);`;
@@ -335,5 +241,10 @@ router.post('/bites', (req, res) => {
     }
   })
 });
+
+router.post('/register',(req,res) => {
+  console.log(req.body);
+  res.sendStatus(200);
+})
 
 module.exports = router;

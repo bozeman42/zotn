@@ -1,5 +1,17 @@
 h1 {
-  color: red;
+  color: black;
+}
+
+.container {
+  width: 80%;
+}
+
+body {
+  background-color: #DDD;
+}
+
+#main-content {
+  padding-bottom: 50px;
 }
 
 .barcode {
@@ -17,4 +29,39 @@ h1 {
 
 .hunterOrange {
   background-color: #ff6600;
+}
+
+#scannerIndicator {
+  display: inline-block;
+  width: 58px;
+  height: 38px;
+  border: black 1px solid;
+  border-radius: 5px;
+  background-color: #444;
+}
+
+#scannerIndicator.scanLight {
+  background-color: #00ff00; 
+}
+
+#footer {
+  background-color: #222;
+  display:flex;
+  justify-content: center;
+  color: whitesmoke;
+  z-index: 1;
+  left: 0;
+  bottom: 0;
+  position: fixed;
+  width: 100%;
+  a {
+    color: deepskyblue;
+  }
+  #footer-content {
+    display:flex;
+    align-items: center;
+    padding-top: 5px;
+    padding-bottom: 5px;
+    width: 80%;
+  }
 }
