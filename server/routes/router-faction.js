@@ -86,7 +86,7 @@ router.get('/badges/assigned',(req,res) => {
 
 // register new faction lanyard
 router.post('/badges',(req,res) => {
-  const {EntityId, Faction, Level} = req.query;
+  const {EntityId, Faction, Level} = req.body;
   console.log(EntityId,Faction,Level);
   pool.connect((connectError,client,done) => {
     if (connectError) {

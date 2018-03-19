@@ -4,8 +4,10 @@ export default class DedicatedScanner extends EventEmitter {
   constructor(callback) {
     super();
     this.inputString = '';
-    this.getScannerInput = this.getScannerInput.bind(this);
+    console.log('The listeners are bound.');
+    this.handleKeydownOnlyKeys = this.handleKeydownOnlyKeys.bind(this);
     this.detectRapidInput = this.detectRapidInput.bind(this);
+    this.getScannerInput = this.getScannerInput.bind(this);
     this.callback = callback;
     this.timeoutHandler = null;
     this.result = '';
@@ -13,7 +15,7 @@ export default class DedicatedScanner extends EventEmitter {
   }
 
   start() {
-    window.addEventListener('keydown',this.handleKeydownOnlyKeys);
+    window.addEventListener('keydown', this.handleKeydownOnlyKeys);
     window.addEventListener('keypress', this.detectRapidInput);
     this.addListener('scan', this.callback);
   }
@@ -21,8 +23,8 @@ export default class DedicatedScanner extends EventEmitter {
   stop() {
     return new Promise((resolve) => {
       try {
-        window.removeEventListener('keypress', this.detectRapidInput);
         window.removeEventListener('keydown', this.handleKeydownOnlyKeys);
+        window.removeEventListener('keypress', this.detectRapidInput);
         this.removeListener('scan', this.callback)
         resolve("Stopped");
       } catch (error) {

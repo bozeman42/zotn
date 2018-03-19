@@ -5,6 +5,7 @@ export default class Scanner {
     this.scanner = null;
     this.callback = callback;
     this.element = element;
+    this.state.active = false;
   }
 
   start() {
@@ -18,6 +19,7 @@ export default class Scanner {
     Instascan.Camera.getCameras()
       .then(function (cameras) {
         if (cameras.length > 0) {
+          this.state.active = true;
           vm.scanner.start(cameras[0]);
         } else {
           console.error('No cameras found.');
@@ -31,6 +33,7 @@ export default class Scanner {
     if (this.scanner) {
       return this.scanner.stop()
         .then(() => {
+          this.state.active = false;
           this.scanner = null;
         })
         .catch((error) => {

@@ -3,7 +3,9 @@ export default class {
     this.$inject = ['$location', 'ScannerService'];
     this.$location = $location;
     this.ss = ScannerService;
+    
   }
+
   restart(){
     if (this.$location.path() !== '/'){
       this.ss.stop();

@@ -54,27 +54,22 @@ export default class PlayerSelectController {
 
   isLoginSuccessful(content) {
     const vm = this;
-    const { ss, chime, data: { players }, ss: { scanner, isJSON } } = vm;
+    const { chime, data: { players }} = vm;
     let { badge, message } = vm;
     let result = false;
-    if (!isJSON(content)) {
-      vm.message = 'Invalid data format. Please have team check badge...';
+    badge = content
+    if (!vm.isBadgeValid(badge)) {
+      vm.message = "Please scan a valid player badge.";
+      result = false;
+    } else if (!vm.playerExists(badge)) {
+      vm.message = "This badge is not associated with a player account.";
       result = false;
     } else {
-      badge = JSON.parse(content);
-      if (!vm.isBadgeValid(badge)) {
-        vm.message = "Please scan a valid player badge.";
-        result = false;
-      } else if (!vm.playerExists(badge)) {
-        vm.message = "This badge is not associated with a player account.";
-        result = false;
-      } else {
-        vm.setCurrentPlayer(badge);
-        chime.play();
-        // const welcome = new SpeechSynthesisUtterance(`Hello, ${this.data.currentPlayer.nickname}. Identity confirmed.`)
-        // speechSynthesis.speak(welcome);
-        result = true;
-      }
+      vm.setCurrentPlayer(badge);
+      chime.play();
+      // const welcome = new SpeechSynthesisUtterance(`Hello, ${this.data.currentPlayer.nickname}. Identity confirmed.`)
+      // speechSynthesis.speak(welcome);
+      result = true;
     }
     return result;
   }
