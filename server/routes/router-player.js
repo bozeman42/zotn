@@ -48,7 +48,7 @@ router.get('/counts',(req,res) => {
 });
 
 router.post('/new',(req,res) => {
-  const { id, nickname, faction } = req.body;
+  const { id } = req.body;
   pool.connect((connectError,client,done) => {
     if (connectError) {
       res.status(500).send({
@@ -56,9 +56,11 @@ router.post('/new',(req,res) => {
         error: connectError
       });
     } else {
-      const queryText = `INSERT INTO "players" ("id", "nickname", "faction")
-      VALUES ($1,$2,$3);`;
-      client.query(queryText,[id, nickname, faction], (queryError, result) => {
+      const queryText = `INSERT INTO "players" ("id")
+                        VALUES ($1)
+                        ON CONFLICT ("id")
+                        DO NOTHING RETURNING "id";`;
+      client.query(queryText,[id], (queryError, result) => {
         done();
         if (queryError) {
           res.status(500).send({
@@ -66,9 +68,29 @@ router.post('/new',(req,res) => {
             error: queryError
           });
         } else {
-          res.sendStatus(201);
+          console.log(result);
+          if (result.rowCount) {
+            res.status(201).send(result.rows[0]);
+          } else {
+            res.status(200).send("Player record already exists for this ID");
+          }
         }
       });
+    }
+  })
+})
+
+router.put('/name',(req,res) => {
+  const { name } = req.body;
+  pool.connect((connectError,client,done) => {
+    if (connectError) {
+      res.status(500).send({
+        message: "Error connecting to database.",
+        error: connectError
+      });
+    } else {
+      const queryText = 
+        `UPDATE "players"`
     }
   })
 })

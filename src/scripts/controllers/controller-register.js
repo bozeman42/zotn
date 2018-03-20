@@ -17,33 +17,65 @@ export default class RegisterPlayerController {
     vm.badge = null;
     vm.chime = new Audio(chime);
     vm.data = PlayerService.data;
-    vm.message = 'Please enter desired nickname...';
-    vm.enteringInfo = true;
+    vm.message = 'Loading...';
+    vm.enteringInfo = false;
     vm.assignFactionBadge = vm.assignFactionBadge.bind(this);
+    vm.registerBadge = vm.registerBadge.bind(this);
     vm.startRegistrationScanner = vm.startRegistrationScanner.bind(this);
+    vm.startRegistrationScanner();
   }
 
   startRegistrationScanner() {
     const vm = this;
     console.log(this);
-    this.$scope.$apply(() => {
-      vm.message = "Please scan your Con badge...";
-    })
-    vm.ss.start(vm.registerBadge.bind(vm));
+    vm.message = "Please scan your Con badge...";
+    vm.ss.start(vm.registerBadge);
+  }
+
+  submitNickname() {
+    const vm = this;
+    console.log('This:', vm);
+    console.log(vm.data.newPlayer);
   }
 
   registerBadge(content) {
     const vm = this;
     vm.$scope.$apply(() => {
-      if (this.isValidNewPlayer(content)) {
+      if (this.isPlayerBadgeValid(content)) {
+        vm.chime.play();
         vm.ss.stop()
-        vm.ps.createNewPlayerWithId(content.EntityId);
-        vm.assignFactionBadge()
+        vm.ps.createNewPlayerWithId(content.EntityId)
+          .then((response) => {
+            if (response.data.id) {
+              console.log('Heeeey', response);
+              vm.data.newPlayer.id = response.data.id;
+              vm.requestNicknameInput();
+            } else {
+              vm.message = response.data;
+              vm.resetScanner(vm.registerBadge);
+            }
+          })
       } else {
         vm.ss.stop();
+        vm.message = "Please scan a valid player badge.";
         vm.resetScanner(vm.startRegistrationScanner);
       }
     });
+  }
+
+  requestNicknameInput() {
+    console.log('Requesting nickname input');
+    this.enteringInfo = true;
+    this.message = "Please enter desired nickname...";
+  }
+
+  submitNickname(name) {
+    console.log(this.data.newPlayer);
+    this.ps.submitNickname(name);
+  }
+
+  isPlayerBadgeValid(badge) {
+    return (badge.EntityType === "Badge" && badge.EntityId);
   }
 
   assignFactionBadge() {
@@ -59,7 +91,7 @@ export default class RegisterPlayerController {
         const lanyardId = content.EntityId;
         const playerId = vm.data.newPlayer.id;
         vm.message = "Thank you. One moment...";
-        vm.fs.attachPlayerToFactionLanyard(lanyardId,playerId);
+        vm.fs.attachPlayerToFactionLanyard(lanyardId, playerId);
       } else {
         vm.ss.stop();
         vm.resetScanner(vm.assignFactionBadge);
@@ -67,31 +99,9 @@ export default class RegisterPlayerController {
     })
   }
 
-  isValidNewPlayer(content) {
-    const vm = this;
-    const { ss, chime, data: { players }, ss: { scanner, isJSON } } = vm;
-    let { badge, message } = vm;
-    let result = false;
-    badge = content;
-    if (!vm.isBadgeValid(badge)) {
-      vm.message = "Please scan a valid player badge.";
-      result = false;
-    } else if (vm.playerExists(badge)) {
-      vm.message = "This badge is already associated with a player account.";
-      result = false;
-    } else {
-      chime.play();
-      result = true;
-    }
-    if (result === false) {
-      badge = null;
-    }
-    return result;
-  }
-
   isCorrectFactionBadge(content) {
     const vm = this;
-    const { ss, chime, data: {newPlayer}} = vm;
+    const { ss, chime, data: { newPlayer } } = vm;
     const level = newPlayer.level();
     let result = true;
     if (content.EntityType !== "FactionLanyard") {
@@ -114,20 +124,6 @@ export default class RegisterPlayerController {
         scannerFunction();
       })
     }, 2000);
-  }
-
-  isBadgeValid(badge) {
-    return (badge.EntityType === "Badge" && badge.EntityId);
-  }
-
-  playerExists(badge) {
-    return this.data.players.hasOwnProperty(badge.EntityId);
-  }
-
-  getNickname() {
-    const vm = this;
-    console.log(vm.newPlayer);
-    vm.message = "Please enter a public nickname for this account:";
   }
 
   submitNewPlayer() {

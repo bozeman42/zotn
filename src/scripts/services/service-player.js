@@ -12,7 +12,7 @@ export default class PlayerService {
       // },
       players: {},
       currentPlayer: {},
-      newPlayer: new Player
+      newPlayer: new Player(null)
     };
     this.$http = $http;
     this.getPlayers();
@@ -44,13 +44,17 @@ export default class PlayerService {
     .catch((error) => console.log('an error occured',error));
   }
 
-  submitNewPlayer(player){
-    const { nickname, faction, id } = player;
-    const playerToSubmit = new Player(faction, id, nickname);
-    return this.$http.post('/players/new',playerToSubmit)
-    .catch((error) => {
-      console.error(error);
-    });
+  createNewPlayerWithId(id){
+    const data = { id: id }
+    return this.$http.post('/players/new',data)
+    .catch((error) => console.error(error));
+  }
+
+  submitNickname(name) {
+    const data = {
+      name: name
+    }
+    return this.$http.put('/players/name',data);
   }
 
   creditKill(player){
