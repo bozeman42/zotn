@@ -17,12 +17,10 @@ export default class RegisterPlayerController {
     vm.badge = null;
     vm.chime = new Audio(chime);
     vm.data = PlayerService.data;
-    vm.message = 'Loading...';
-    vm.enteringInfo = false;
+    vm.message = 'Please enter desired nickname...';
+    vm.enteringInfo = true;
     vm.assignFactionBadge = vm.assignFactionBadge.bind(this);
     vm.startRegistrationScanner = vm.startRegistrationScanner.bind(this);
-    Promise.all([PlayerService.getCounts(), PlayerService.getPlayers(), FactionService.getFactionBadges()])
-      .then(vm.startRegistrationScanner.bind(vm));
   }
 
   startRegistrationScanner() {

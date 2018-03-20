@@ -49,6 +49,9 @@ INSERT INTO "factions" ("faction_id","faction_name") VALUES
 	(1,'Hunter'),
 	(2,'Zombie');
 
+INSERT INTO "boons" ("boon_id","name") VALUES 
+    (1,"Armor"),
+    (2,"Armor Piercing Bite");
 
 SELECT
 	(SELECT COUNT(*) FROM "players" WHERE "faction" = 1) as "hunter_count",

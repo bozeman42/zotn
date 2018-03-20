@@ -20,6 +20,7 @@ router.get('/badges',(req,res) => {
       client.query(queryString,(queryError,result) => {
         done();
         if (queryError) {
+          console.log(queryError);
           res.status(500).send({
             message: "Database query error",
             error: queryError

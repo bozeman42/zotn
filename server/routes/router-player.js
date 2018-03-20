@@ -1,6 +1,7 @@
 const router = require('express').Router();
 const pool = require('../modules/pool');
 
+
 router.get('/',(req,res) => {
   pool.connect((connectError,client,done) => {
     if (connectError) {

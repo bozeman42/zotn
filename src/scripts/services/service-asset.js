@@ -1,5 +1,6 @@
 export default class AssetService {
   constructor($http, FactionService) {
+    console.log("asset service created");
     const vm = this;
     this.fs = FactionService;
     vm.$inject = ['$http', 'FactionService'];

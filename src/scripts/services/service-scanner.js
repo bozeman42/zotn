@@ -4,6 +4,7 @@ import scannerConfig, { DEDICATED_SCANNER, WEBCAM_SCANNER } from '../scanner.con
 
 export default class ScannerService {
   constructor($rootScope) {
+    console.log('scanner service created');
     this.$inject = ['$scope'];
     this.$rootScope = $rootScope;
     this.scanner = null;

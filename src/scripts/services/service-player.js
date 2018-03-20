@@ -2,13 +2,14 @@ import Player from '../classes/Player';
 import { ZOMBIE, HUNTER, HUNTER_ZOMBIE_RATIO } from '../constants/factions';
 export default class PlayerService {
   constructor($http) {
+    console.log('player service created');
     this.$inject = ['$http'];
     this.data = {
-      counts: {
-        zombieCount: 0,
-        hunterCount: 0,
-        playerCount: 0,
-      },
+      // counts: {
+      //   zombieCount: 0,
+      //   hunterCount: 0,
+      //   playerCount: 0,
+      // },
       players: {},
       currentPlayer: {},
       newPlayer: new Player
@@ -16,18 +17,18 @@ export default class PlayerService {
     this.$http = $http;
     this.getPlayers();
   }
-
-  getCounts() {
-    const vm = this;
-    return vm.$http.get('/players/counts')
-    .then((result) => {
-      const { hunter_count, zombie_count, player_count } = result.data[0];
-      vm.data.counts.hunterCount = parseInt(hunter_count);
-      vm.data.counts.zombieCount = parseInt(zombie_count);
-      vm.data.counts.playerCount = parseInt(player_count);
-    })
-    .catch((error) => console.log('error getting count',error));
-  }
+  
+  // getCounts() {
+  //   const vm = this;
+  //   return vm.$http.get('/players/counts')
+  //   .then((result) => {
+  //     const { hunter_count, zombie_count, player_count } = result.data[0];
+  //     vm.data.counts.hunterCount = parseInt(hunter_count);
+  //     vm.data.counts.zombieCount = parseInt(zombie_count);
+  //     vm.data.counts.playerCount = parseInt(player_count);
+  //   })
+  //   .catch((error) => console.log('error getting count',error));
+  // }
 
   getPlayers() {
     let vm = this;
@@ -50,21 +51,6 @@ export default class PlayerService {
     .catch((error) => {
       console.error(error);
     });
-  }
-
-  assignNewPlayerFaction(player) {
-
-  }
-
-  createNewPlayerWithId(id) {
-    const {hunterCount, zombieCount} = this.data.counts;
-    let faction;
-    if (hunterCount / zombieCount < HUNTER_ZOMBIE_RATIO) {
-      faction = HUNTER;
-    } else {
-      faction = ZOMBIE;
-    }
-    this.data.newPlayer = new Player(faction, id);
   }
 
   creditKill(player){

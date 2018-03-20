@@ -1,4 +1,3 @@
-
 // faction / faction_id
 export const HUNTER = 1;
 export const ZOMBIE = 2;
@@ -13,6 +12,7 @@ export const HUNTER_ZOMBIE_RATIO = 4;
 export const BULLET = "Bullet";
 export const BITE = "Bite";
 export const FACTION_LANYARD = "FactionLanyard";
+export const BADGE = "Badge";
 
 
 //webcam scanner video preview element
