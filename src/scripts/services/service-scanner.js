@@ -35,7 +35,6 @@ export default class ScannerService {
     const vm = this;
     let indicatorReset = () => {
       this.$rootScope.$apply(() => {
-        console.log('in timeout',this.scanLight);
         this.scanLight = false;
       })
     }

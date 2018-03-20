@@ -10,7 +10,7 @@ export default class PlayerSelectController {
     this.ss = ScannerService;
     this.data = PlayerService.data;
     this.$location = $location;
-    this.message = 'Scan Badge...';
+    this.message = 'Loading...';
     this.badge = {};
     this.$scope = $scope;
     const vm = this;
@@ -22,6 +22,7 @@ export default class PlayerSelectController {
 
   startPlayerBadgeLoginScanner() {
     const vm = this;
+    vm.message = "Please scan your Con badge...";
     vm.ss.start((content) => {
       vm.$scope.$apply(() => {
         if (vm.isLoginSuccessful(content)) {

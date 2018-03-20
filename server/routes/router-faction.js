@@ -113,4 +113,6 @@ router.post('/badges',(req,res) => {
   })
 });
 
+router.put('/')
+
 module.exports = router;

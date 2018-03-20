@@ -38,5 +38,10 @@ export default class FactionService {
       return vm.data.badges;
     })
   }
+
+  attachPlayerToFactionLanyard(lanyardId,playerId) {
+    console.log("Lanyard Id:",lanyardId,"PlayerId:",playerId);
+    return this.$http()
+  }
 }
 

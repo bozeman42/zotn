@@ -1,5 +1,7 @@
 import scanner from '../modules/physscanner';
 import chime from '../../assets/sounds/electronic_chime.mp3';
+import Player from '../classes/Player';
+
 // injected dependencies:
 // PlayerService
 
@@ -9,30 +11,26 @@ export default class RegisterPlayerController {
     const vm = this;
     vm.ss = ScannerService;
     vm.ps = PlayerService;
+    vm.fs = FactionService;
     vm.$location = $location;
     vm.$scope = $scope;
     vm.badge = null;
     vm.chime = new Audio(chime);
     vm.data = PlayerService.data;
-    vm.message = 'Please scan your Con badge...';
-    vm.newPlayer = {
-      nickname: '',
-      faction: null,
-      hunter_level: 1,
-      zombie_level: 1,
-      id: null
-    }
+    vm.message = 'Loading...';
     vm.enteringInfo = false;
     vm.assignFactionBadge = vm.assignFactionBadge.bind(this);
     vm.startRegistrationScanner = vm.startRegistrationScanner.bind(this);
     Promise.all([PlayerService.getCounts(), PlayerService.getPlayers(), FactionService.getFactionBadges()])
-      .then(vm.startRegistrationScanner.bind(vm))
-      ;
+      .then(vm.startRegistrationScanner.bind(vm));
   }
 
   startRegistrationScanner() {
     const vm = this;
     console.log(this);
+    this.$scope.$apply(() => {
+      vm.message = "Please scan your Con badge...";
+    })
     vm.ss.start(vm.registerBadge.bind(vm));
   }
 
@@ -41,7 +39,8 @@ export default class RegisterPlayerController {
     vm.$scope.$apply(() => {
       if (this.isValidNewPlayer(content)) {
         vm.ss.stop()
-        vm.getPlayerInfo();
+        vm.ps.createNewPlayerWithId(content.EntityId);
+        vm.assignFactionBadge()
       } else {
         vm.ss.stop();
         vm.resetScanner(vm.startRegistrationScanner);
@@ -51,14 +50,21 @@ export default class RegisterPlayerController {
 
   assignFactionBadge() {
     const vm = this;
+    vm.message = `Please scan a level ${vm.data.newPlayer.level()} ${vm.data.newPlayer.factionName()} badge...`;
     vm.ss.start(vm.scanFactionBadge.bind(vm));
   }
 
   scanFactionBadge(content) {
     const vm = this;
     vm.$scope.$apply(() => {
-      if (vm.isValidFactionBadge(content)) {
-
+      if (vm.isCorrectFactionBadge(content)) {
+        const lanyardId = content.EntityId;
+        const playerId = vm.data.newPlayer.id;
+        vm.message = "Thank you. One moment...";
+        vm.fs.attachPlayerToFactionLanyard(lanyardId,playerId);
+      } else {
+        vm.ss.stop();
+        vm.resetScanner(vm.assignFactionBadge);
       }
     })
   }
@@ -77,7 +83,6 @@ export default class RegisterPlayerController {
       result = false;
     } else {
       chime.play();
-      vm.newPlayer.id = badge.EntityId;
       result = true;
     }
     if (result === false) {
@@ -86,16 +91,28 @@ export default class RegisterPlayerController {
     return result;
   }
 
-  // isValidFactionBadge(content) {
-  //   const vm = this;
-  //   const { ss, chime}
-  // }
+  isCorrectFactionBadge(content) {
+    const vm = this;
+    const { ss, chime, data: {newPlayer}} = vm;
+    const level = newPlayer.level();
+    let result = true;
+    if (content.EntityType !== "FactionLanyard") {
+      vm.message = 'Incorrect asset type. Please scan a faction lanyard...';
+      result = false;
+    } else if (content.Faction !== newPlayer.faction) {
+      vm.message = 'Incorrect faction...';
+      result = false;
+    } else if (content.Level !== newPlayer.level()) {
+      vm.message = 'Incorrect level...';
+      result = false;
+    }
+    return result;
+  }
 
   resetScanner(scannerFunction) {
     const vm = this;
     setTimeout(() => {
       vm.$scope.$apply(() => {
-        vm.message = 'Scan badge...';
         scannerFunction();
       })
     }, 2000);

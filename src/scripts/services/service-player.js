@@ -11,6 +11,7 @@ export default class PlayerService {
       },
       players: {},
       currentPlayer: {},
+      newPlayer: new Player
     };
     this.$http = $http;
     this.getPlayers();
@@ -43,18 +44,27 @@ export default class PlayerService {
   }
 
   submitNewPlayer(player){
-    const {hunterCount, zombieCount} = this.data.counts;
-    if (hunterCount / zombieCount < HUNTER_ZOMBIE_RATIO) {
-      player.faction = HUNTER;
-    } else {
-      player.faction = ZOMBIE;
-    }
     const { nickname, faction, id } = player;
     const playerToSubmit = new Player(faction, id, nickname);
     return this.$http.post('/players/new',playerToSubmit)
     .catch((error) => {
       console.error(error);
     });
+  }
+
+  assignNewPlayerFaction(player) {
+
+  }
+
+  createNewPlayerWithId(id) {
+    const {hunterCount, zombieCount} = this.data.counts;
+    let faction;
+    if (hunterCount / zombieCount < HUNTER_ZOMBIE_RATIO) {
+      faction = HUNTER;
+    } else {
+      faction = ZOMBIE;
+    }
+    this.data.newPlayer = new Player(faction, id);
   }
 
   creditKill(player){
