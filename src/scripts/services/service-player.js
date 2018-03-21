@@ -2,7 +2,6 @@ import Player from '../classes/Player';
 import { ZOMBIE, HUNTER, HUNTER_ZOMBIE_RATIO } from '../constants/factions';
 export default class PlayerService {
   constructor($http) {
-    console.log('player service created');
     this.$inject = ['$http'];
     this.data = {
       // counts: {
@@ -41,7 +40,7 @@ export default class PlayerService {
       });
       return vm.data.players;
     })
-    .catch((error) => console.log('an error occured',error));
+    .catch((error) => console.error('an error occured',error));
   }
 
   createNewPlayerWithId(id){
@@ -52,9 +51,13 @@ export default class PlayerService {
 
   submitNickname(name) {
     const data = {
-      name: name
+      name: name,
+      id: this.data.newPlayer.id
     }
-    return this.$http.put('/players/name',data);
+    return this.$http.put('/players/name',data)
+    .catch((error) => {
+      console.error(error);
+    });
   }
 
   creditKill(player){

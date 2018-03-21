@@ -1,6 +1,5 @@
 export default class FactionService {
   constructor($http){
-    console.log('faction service created');
     this.$inject = ['$http'];
     this.$http = $http;
     this.data = {

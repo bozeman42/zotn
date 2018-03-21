@@ -4,7 +4,6 @@ import scannerConfig, { DEDICATED_SCANNER, WEBCAM_SCANNER } from '../scanner.con
 
 export default class ScannerService {
   constructor($rootScope) {
-    console.log('scanner service created');
     this.$inject = ['$scope'];
     this.$rootScope = $rootScope;
     this.scanner = null;
@@ -26,8 +25,6 @@ export default class ScannerService {
     } else {
       console.error("Unknown scanner type. Please check scanner.config.js");
     }
-    
-    console.log(typeof(this.scanner.addListener));
     this.scanner.start();
     this.scanner.addListener('scan', this.activateScanIndicator);
   }

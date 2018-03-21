@@ -27,7 +27,6 @@ export default class RegisterPlayerController {
 
   startRegistrationScanner() {
     const vm = this;
-    console.log(this);
     vm.message = "Please scan your Con badge...";
     vm.ss.start(vm.registerBadge);
   }
@@ -47,7 +46,6 @@ export default class RegisterPlayerController {
         vm.ps.createNewPlayerWithId(content.EntityId)
           .then((response) => {
             if (response.data.id) {
-              console.log('Heeeey', response);
               vm.data.newPlayer.id = response.data.id;
               vm.requestNicknameInput();
             } else {
@@ -69,10 +67,14 @@ export default class RegisterPlayerController {
     this.message = "Please enter desired nickname...";
   }
 
-  submitNickname(name) {
-    console.log(this.data.newPlayer);
-    this.ps.submitNickname(name);
+  submitNickname() {
+    this.enteringInfo = false;
+    this.message = "Thank you. Please wait for scanner...";
+    this.ps.submitNickname(this.data.newPlayer.nickname)
+    .then(this.ps.getPlayer(this.data.newPlayer.id));
   }
+
+
 
   isPlayerBadgeValid(badge) {
     return (badge.EntityType === "Badge" && badge.EntityId);
