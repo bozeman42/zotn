@@ -1,5 +1,3 @@
-import { ZOMBIE, HUNTER} from '../constants/factions';
-
 export default class FactionService {
   constructor($http){
     this.$inject = ['$http'];
@@ -36,6 +34,18 @@ export default class FactionService {
         vm.data.badges[badge.id] = badge;
       });
       return vm.data.badges;
+    })
+  }
+
+  attachPlayerToFactionLanyard(lanyardId,playerId) {
+    console.log("Lanyard Id:",lanyardId,"PlayerId:",playerId);
+    const data = {
+      lanyardId: lanyardId,
+      playerId: playerId
+    }
+    return this.$http.put('/faction/badges/attach',data)
+    .catch((error) => {
+      console.error('error attaching lanyard',error);
     })
   }
 }

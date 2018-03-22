@@ -1,5 +1,7 @@
 const router = require('express').Router();
 const pool = require('../modules/pool');
+const FactionCounts = require('../modules/faction-counts');
+const fc = new FactionCounts;
 
 router.get('/',(req,res) => {
   pool.connect((connectError,client,done) => {
@@ -47,7 +49,7 @@ router.get('/counts',(req,res) => {
 });
 
 router.post('/new',(req,res) => {
-  const { id, nickname, faction } = req.body;
+  const { id } = req.body;
   pool.connect((connectError,client,done) => {
     if (connectError) {
       res.status(500).send({
@@ -55,19 +57,58 @@ router.post('/new',(req,res) => {
         error: connectError
       });
     } else {
-      const queryText = `INSERT INTO "players" ("id", "nickname", "faction")
-      VALUES ($1,$2,$3);`;
-      client.query(queryText,[id, nickname, faction], (queryError, result) => {
-        done();
+      fc.newPlayerFaction()
+      .catch((error) => {
+        res.status(500).send(error);
+      })
+      .then((faction) => {
+        const queryText = `INSERT INTO "players" ("id","faction","credits")
+                          VALUES ($1,$2,3)
+                          ON CONFLICT ("id")
+                          DO NOTHING RETURNING *;`;
+        client.query(queryText,[id,faction], (queryError, result) => {
+          done();
+          if (queryError) {
+            console.error('Error Querying the database',queryError);
+            res.status(500).send({
+              message: "Error querying database",
+              error: queryError
+            });
+          } else {
+            if (result.rowCount) {
+              res.status(201).send(result.rows[0]);
+            } else {
+              res.status(200).send("Player record already exists for this ID");
+            }
+          }
+        });
+
+      })
+    }
+  })
+})
+
+router.put('/name',(req,res) => {
+  const { name, id } = req.body;
+  pool.connect((connectError,client,done) => {
+    if (connectError) {
+      res.status(500).send({
+        message: "Error connecting to database.",
+        error: connectError
+      });
+    } else {
+      const queryText = 
+        `UPDATE "players" SET "nickname" = $1 WHERE "id" = $2;`;
+      client.query(queryText,[name,id],(queryError,result) => {
         if (queryError) {
           res.status(500).send({
             message: "Error querying database",
             error: queryError
           });
         } else {
-          res.sendStatus(201);
+          res.sendStatus(200);
         }
-      });
+      })
     }
   })
 })

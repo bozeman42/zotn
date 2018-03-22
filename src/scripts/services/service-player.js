@@ -4,29 +4,30 @@ export default class PlayerService {
   constructor($http) {
     this.$inject = ['$http'];
     this.data = {
-      counts: {
-        zombieCount: 0,
-        hunterCount: 0,
-        playerCount: 0,
-      },
+      // counts: {
+      //   zombieCount: 0,
+      //   hunterCount: 0,
+      //   playerCount: 0,
+      // },
       players: {},
       currentPlayer: {},
+      newPlayer: new Player(null)
     };
     this.$http = $http;
     this.getPlayers();
   }
-
-  getCounts() {
-    const vm = this;
-    return vm.$http.get('/players/counts')
-    .then((result) => {
-      const { hunter_count, zombie_count, player_count } = result.data[0];
-      vm.data.counts.hunterCount = parseInt(hunter_count);
-      vm.data.counts.zombieCount = parseInt(zombie_count);
-      vm.data.counts.playerCount = parseInt(player_count);
-    })
-    .catch((error) => console.log('error getting count',error));
-  }
+  
+  // getCounts() {
+  //   const vm = this;
+  //   return vm.$http.get('/players/counts')
+  //   .then((result) => {
+  //     const { hunter_count, zombie_count, player_count } = result.data[0];
+  //     vm.data.counts.hunterCount = parseInt(hunter_count);
+  //     vm.data.counts.zombieCount = parseInt(zombie_count);
+  //     vm.data.counts.playerCount = parseInt(player_count);
+  //   })
+  //   .catch((error) => console.log('error getting count',error));
+  // }
 
   getPlayers() {
     let vm = this;
@@ -39,19 +40,21 @@ export default class PlayerService {
       });
       return vm.data.players;
     })
-    .catch((error) => console.log('an error occured',error));
+    .catch((error) => console.error('an error occured',error));
   }
 
-  submitNewPlayer(player){
-    const {hunterCount, zombieCount} = this.data.counts;
-    if (hunterCount / zombieCount < HUNTER_ZOMBIE_RATIO) {
-      player.faction = HUNTER;
-    } else {
-      player.faction = ZOMBIE;
+  createNewPlayerWithId(id){
+    const data = { id: id }
+    return this.$http.post('/players/new',data)
+    .catch((error) => console.error(error));
+  }
+
+  submitNickname(player) {
+    const data = {
+      name: player.nickname,
+      id: player.id
     }
-    const { nickname, faction, id } = player;
-    const playerToSubmit = new Player(faction, id, nickname);
-    return this.$http.post('/players/new',playerToSubmit)
+    return this.$http.put('/players/name',data)
     .catch((error) => {
       console.error(error);
     });

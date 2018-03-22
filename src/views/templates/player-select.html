@@ -1,15 +1,18 @@
 <div id="main-content" class="container">
+  <h1>Player check-in</h1>
   <div>
     <h1>{{psc.message}}</h1>
     <video id="scanPreview" height="100" width="200"></video>
   </div>
   <ul>
     <li ng-repeat="player in psc.data.players">
-      <button ng-click="psc.selectPlayer(player)">
-        Select
-      </button>
-        <img class="factionIcon" ng-src="{{player.icon}}">
-      {{player.nickname}} | Level: {{player.level}}
+      <div>
+        <button ng-click="psc.selectPlayer(player)">
+          Select
+        </button>
+          <img class="factionIcon" ng-class="{zombieGreen: player.isZombie(), hunterOrange: player.isHunter()}" ng-src="{{player.icon}}">
+        {{player.nickname}} Level: {{player.level()}} XP: {{player.xp}} | Score: {{player.score}}
+      </div>
     </li>
   </ul>
 </div>

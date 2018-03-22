@@ -25,8 +25,6 @@ export default class ScannerService {
     } else {
       console.error("Unknown scanner type. Please check scanner.config.js");
     }
-    
-    console.log(typeof(this.scanner.addListener));
     this.scanner.start();
     this.scanner.addListener('scan', this.activateScanIndicator);
   }
@@ -35,7 +33,6 @@ export default class ScannerService {
     const vm = this;
     let indicatorReset = () => {
       this.$rootScope.$apply(() => {
-        console.log('in timeout',this.scanLight);
         this.scanLight = false;
       })
     }

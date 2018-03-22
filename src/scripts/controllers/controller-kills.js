@@ -93,13 +93,5 @@ export default class KillController {
   creditKill(player){
     this.ps.creditKill(player);
   }
-  
-  isZombie(){
-    return this.data.player.faction === ZOMBIE;
-  }
-
-  isHunter() {
-    return this.data.player.faction === HUNTER;
-  }
 
 }

@@ -1,8 +1,10 @@
+<h1>Register New Player</h1>
 <h1>{{rc.message}}</h1>
 <div>
-  <form ng-submit="rc.submitNewPlayer()" ng-if="rc.enteringInfo">
+  <img class="newFactionIcon" ng-class="{zombieGreen: rc.data.newPlayer.isZombie(), hunterOrange: rc.data.newPlayer.isHunter()}" ng-src="{{rc.data.newPlayer.icon}}">
+  <form ng-submit="rc.submitNickname()" ng-if="rc.enteringInfo">
     <label for="nickname"></label>
-    <input type="text" id="nickname" placeholder="Player nickname..." ng-model="rc.newPlayer.nickname">
-    <button type="submit">SUBMIT</button>
+    <input type="text" id="nickname" placeholder="Player nickname..." ng-model="rc.data.newPlayer.nickname">
+    <button type="submit">Submit Nickname</button>
   </form>
 </div>
