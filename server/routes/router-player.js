@@ -65,10 +65,11 @@ router.post('/new',(req,res) => {
         const queryText = `INSERT INTO "players" ("id","faction","credits")
                           VALUES ($1,$2,3)
                           ON CONFLICT ("id")
-                          DO NOTHING RETURNING "id","";`;
+                          DO NOTHING RETURNING *;`;
         client.query(queryText,[id,faction], (queryError, result) => {
           done();
           if (queryError) {
+            console.error('Error Querying the database',queryError);
             res.status(500).send({
               message: "Error querying database",
               error: queryError
@@ -97,8 +98,7 @@ router.put('/name',(req,res) => {
       });
     } else {
       const queryText = 
-        `UPDATE "players" SET ("name") VALUES ($1)
-        WHERE "id" = $2;`;
+        `UPDATE "players" SET "nickname" = $1 WHERE "id" = $2;`;
       client.query(queryText,[name,id],(queryError,result) => {
         if (queryError) {
           res.status(500).send({

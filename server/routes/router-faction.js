@@ -114,6 +114,40 @@ router.post('/badges',(req,res) => {
   })
 });
 
+router.put('/badges/attach',(req,res) => {
+  const { lanyardId, playerId } = req.body;
+  pool.connect((connectError,client,done) => {
+    if (connectError) {
+      console.error('Database connection error',connectError);
+      res.status(500).send({
+        message: "Database connection error",
+        error: connectError
+      });
+    } else {
+      const queryData = [lanyardId,playerId];
+      const queryString = 
+        `UPDATE "faction_lanyards" SET "player_id" = $2
+        WHERE "id" = $1 AND "player_id" IS NULL
+        RETURNING *;`
+        client.query(queryString,queryData,(queryError,result) => {
+          if (queryError) {
+            console.error('Database Query Error:\n',queryError);
+            res.status(500).send({
+              message: "Database Query Error",
+              error: queryError
+            });
+          } else {
+            if (result.rowCount){
+              res.send(result.rows[0]);
+            } else {
+              res.sendStatus(200);
+            }
+          }
+        })
+    }
+  })
+})
+
 router.put('/')
 
 module.exports = router;

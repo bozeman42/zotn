@@ -49,10 +49,10 @@ export default class PlayerService {
     .catch((error) => console.error(error));
   }
 
-  submitNickname(name) {
+  submitNickname(player) {
     const data = {
-      name: name,
-      id: this.data.newPlayer.id
+      name: player.nickname,
+      id: player.id
     }
     return this.$http.put('/players/name',data)
     .catch((error) => {

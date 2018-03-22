@@ -39,7 +39,14 @@ export default class FactionService {
 
   attachPlayerToFactionLanyard(lanyardId,playerId) {
     console.log("Lanyard Id:",lanyardId,"PlayerId:",playerId);
-    return this.$http()
+    const data = {
+      lanyardId: lanyardId,
+      playerId: playerId
+    }
+    return this.$http.put('/faction/badges/attach',data)
+    .catch((error) => {
+      console.error('error attaching lanyard',error);
+    })
   }
 }
 

@@ -63,4 +63,13 @@ export default class Player {
     }
     return level;
   }
+
+  isZombie() {
+    return this.faction === ZOMBIE;
+  }
+
+  isHunter() {
+    return this.faction === HUNTER;
+  }
+
 }

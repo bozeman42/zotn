@@ -5,7 +5,6 @@ const HUNTER_ZOMBIE_RATIO = 4;
 
 class FactionCounts {
   constructor() {
-    // console.log('Pool',Pool);
     this.pool = new Pool();
     this.playerCounts = {
       hunters: 0,
@@ -26,7 +25,6 @@ class FactionCounts {
       count.zombies = parseInt(count.zombies);
       count.total = parseInt(count.total);
       this.playerCounts = count;
-      console.log(count);
       return count;
     })
     .catch((error) => {

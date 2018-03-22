@@ -19,6 +19,7 @@ export default class RegisterPlayerController {
     vm.data = PlayerService.data;
     vm.message = 'Loading...';
     vm.enteringInfo = false;
+    vm.data.newPlayer = new Player;
     vm.assignFactionBadge = vm.assignFactionBadge.bind(this);
     vm.registerBadge = vm.registerBadge.bind(this);
     vm.startRegistrationScanner = vm.startRegistrationScanner.bind(this);
@@ -46,6 +47,7 @@ export default class RegisterPlayerController {
         vm.ps.createNewPlayerWithId(content.EntityId)
           .then((response) => {
             if (response.data.id) {
+              vm.data.newPlayer.setFaction(response.data.faction);
               vm.data.newPlayer.id = response.data.id;
               vm.requestNicknameInput();
             } else {
@@ -70,8 +72,11 @@ export default class RegisterPlayerController {
   submitNickname() {
     this.enteringInfo = false;
     this.message = "Thank you. Please wait for scanner...";
-    this.ps.submitNickname(this.data.newPlayer.nickname)
-    .then(this.ps.getPlayer(this.data.newPlayer.id));
+    this.ps.submitNickname(this.data.newPlayer)
+    .then(this.assignFactionBadge)
+    .catch((error) => {
+      console.error(error);
+    });
   }
 
 
@@ -89,11 +94,15 @@ export default class RegisterPlayerController {
   scanFactionBadge(content) {
     const vm = this;
     vm.$scope.$apply(() => {
+      console.log('Scan faction badge.')
       if (vm.isCorrectFactionBadge(content)) {
         const lanyardId = content.EntityId;
         const playerId = vm.data.newPlayer.id;
         vm.message = "Thank you. One moment...";
-        vm.fs.attachPlayerToFactionLanyard(lanyardId, playerId);
+        vm.fs.attachPlayerToFactionLanyard(lanyardId, playerId)
+        .then((response) => {
+          console.log(response);
+        })
       } else {
         vm.ss.stop();
         vm.resetScanner(vm.assignFactionBadge);
