@@ -28,7 +28,8 @@ router.get('/',(req,res) => {
 });
 
 router.get('/:id',(req,res) => {
-  const { id } = req.query;
+  const { id } = req.params;
+  console.log('id',id)
   pool.connect((connectError,client,done) => {
     if (connectError) {
       console.error(connectError);

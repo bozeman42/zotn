@@ -48,7 +48,7 @@ export default class RegisterPlayerController {
         vm.ps.createNewPlayerWithId(content.EntityId)
           .then((response) => {
             if (response.data.id) {
-              vm.data.newPlayer.setFaction(response.data.faction);
+              vm.data.newPlayer.faction = response.data.faction;
               vm.data.newPlayer.id = response.data.id;
               vm.requestNicknameInput();
             } else {
@@ -88,7 +88,7 @@ export default class RegisterPlayerController {
 
   assignFactionBadge() {
     const vm = this;
-    vm.message = `Welcome, ${vm.data.newPlayer.nickname}. Please scan a level ${vm.data.newPlayer.level()} ${vm.data.newPlayer.factionName()} badge...`;
+    vm.message = `Welcome, ${vm.data.newPlayer.nickname}. Please scan a level ${vm.data.newPlayer.level} ${vm.data.newPlayer.factionName} badge...`;
     vm.ss.start(vm.scanFactionBadge.bind(vm));
   }
 
@@ -124,7 +124,7 @@ export default class RegisterPlayerController {
   isCorrectFactionBadge(content) {
     const vm = this;
     const { ss, chime, data: { newPlayer } } = vm;
-    const level = newPlayer.level();
+    const level = newPlayer.level;
     let result = true;
     if (content.EntityType !== "FactionLanyard") {
       vm.message = 'Incorrect asset type. Please scan a faction lanyard...';
@@ -132,7 +132,7 @@ export default class RegisterPlayerController {
     } else if (content.Faction !== newPlayer.faction) {
       vm.message = 'Incorrect faction...';
       result = false;
-    } else if (content.Level !== newPlayer.level()) {
+    } else if (content.Level !== newPlayer.level) {
       vm.message = 'Incorrect level...';
       result = false;
     }
