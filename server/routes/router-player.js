@@ -22,9 +22,36 @@ router.get('/',(req,res) => {
         } else {
           res.send(result.rows);
         }
-      })
+      });
     }
-  })
+  });
+});
+
+router.get('/:id',(req,res) => {
+  const { id } = req.query;
+  pool.connect((connectError,client,done) => {
+    if (connectError) {
+      console.error(connectError);
+      res.status(500).send({
+        message: 'Database connection error',
+        error: connectError
+      });
+    } else {
+      const queryText = "SELECT * FROM players WHERE id = $1;";
+      client.query(queryText,[id],(queryError,result) => {
+        done();
+        if (queryError) {
+          console.error(queryError);
+          res.status(500).send({
+            message: 'Database query error',
+            error: queryError
+          });
+        } else {
+          res.send(result.rows[0]);
+        }
+      });
+    }
+  });
 });
 
 router.get('/counts',(req,res) => {

@@ -60,6 +60,13 @@ export default class PlayerService {
     });
   }
 
+  getPlayer(id) {
+    return this.$http.get(`/${id}`)
+    .then((response) => {
+      console.log('get player response',response);
+    })
+  }
+
   creditKill(player){
     console.log('playerService creditKill player:',player);
   }
