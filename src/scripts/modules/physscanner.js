@@ -29,7 +29,7 @@ export default class DedicatedScanner extends EventEmitter {
       } catch (error) {
         reject(error);
       }
-    })
+    });
   }
   
   detectRapidInput(event) {
@@ -38,7 +38,7 @@ export default class DedicatedScanner extends EventEmitter {
       clearTimeout(this.timeoutHandler);
     }
     this.inputString += event.key;
-    this.timeoutHandler = setTimeout(this.getScannerInput, 100);
+    this.timeoutHandler = setTimeout(this.getScannerInput, 75);
   }
 
   getScannerInput() {
@@ -60,4 +60,3 @@ export default class DedicatedScanner extends EventEmitter {
     event.preventDefault();
   }
 }
-

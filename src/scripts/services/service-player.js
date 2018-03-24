@@ -37,6 +37,7 @@ export default class PlayerService {
       players.forEach((player) => {
         const { faction, id, nickname,zombie_level,hunter_level,credits,score,xp } = player;
         vm.data.players[id] = new Player(faction, id, nickname,zombie_level,hunter_level,credits,score,xp);
+        console.log(vm.data.players[id]);
       });
       return vm.data.players;
     })
@@ -58,6 +59,17 @@ export default class PlayerService {
     .catch((error) => {
       console.error(error);
     });
+  }
+
+  getPlayer(id) {
+    const vm = this;
+    return this.$http.get(`/players/${id}`)
+    .then((response) => {
+      const { faction, id, nickname,zombie_level,hunter_level,credits,score,xp } = response.data;
+      console.log(response);
+      vm.data.players[id] = new Player(faction, id, nickname,zombie_level,hunter_level,credits,score,xp);
+      return vm.data.players[id];
+    })
   }
 
   creditKill(player){

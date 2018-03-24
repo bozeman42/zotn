@@ -56,6 +56,7 @@ export default class ScannerService {
   }
 
   isJSON(str) {
+    console.log(str);
     try {
       JSON.parse(str);
       return true;
