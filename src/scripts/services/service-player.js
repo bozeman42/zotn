@@ -36,8 +36,16 @@ export default class PlayerService {
       const players = response.data;
       players.forEach((player) => {
         const { faction, id, nickname,zombie_level,hunter_level,credits,score,xp } = player;
-        vm.data.players[id] = new Player(faction, id, nickname,zombie_level,hunter_level,credits,score,xp);
-        console.log(vm.data.players[id]);
+        vm.data.players[id] = new Player(
+          faction,
+          id,
+          nickname,
+          zombie_level,
+          hunter_level,
+          credits,
+          score,
+          xp
+        );
       });
       return vm.data.players;
     })

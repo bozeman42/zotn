@@ -1,12 +1,11 @@
-import { HUNTER, ZOMBIE, HUNTER_FACTION_NAME, ZOMBIE_FACTION_NAME, HUNTER_ZOMBIE_RATIO } from '../constants/factions';
+import { HUNTER, ZOMBIE, NO_FACTION, HUNTER_FACTION_NAME, ZOMBIE_FACTION_NAME, HUNTER_ZOMBIE_RATIO } from '../constants/factions';
 import zombieIcon from '../../assets/images/zombie-icon.png';
 import hunterIcon from '../../assets/images/hunter-icon.png';
+import noFactionIcon from '../../assets/images/question-mark.png';
 
 export default class Player {
-  constructor(faction, id = null, nickname = '', zombieLevel = 1, hunterLevel = 1, credits = 0, score = 0, xp = 0) {
-    if (faction) {
-      this.faction = faction;
-    }
+  constructor(faction = 0, id = null, nickname = '', zombieLevel = 1, hunterLevel = 1, credits = 0, score = 0, xp = 0) {
+    this.faction = faction;
     this.setId(id);
     this.nickname = nickname;
     this.zombie_level = zombieLevel;
@@ -63,8 +62,8 @@ export default class Player {
       this.icon = hunterIcon;
     } else if (this.faction === ZOMBIE) {
       this.icon = zombieIcon;
-    } else {
-      this.icon = null;
+    } else if (this.faction === NO_FACTION) {
+      this.icon = noFactionIcon;
     }
   }
 
