@@ -1,4 +1,5 @@
 // faction / faction_id
+export const NO_FACTION = 0;
 export const HUNTER = 1;
 export const ZOMBIE = 2;
 

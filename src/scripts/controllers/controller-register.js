@@ -111,6 +111,9 @@ export default class RegisterPlayerController {
             } else if (vm.data.newPlayer.isZombie()) {
               vm.message = "Go get some tasty brains!";
             }
+
+            // TO-DO: send to shop to purchase bites/bullets
+
             setTimeout(vm.completeRegistration,2000);
           } else {
             vm.message = "This badge is already assigned. Please select another badge.";

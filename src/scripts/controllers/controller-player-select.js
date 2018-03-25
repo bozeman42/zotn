@@ -15,9 +15,10 @@ export default class PlayerSelectController {
     this.$scope = $scope;
     const vm = this;
     vm.chime = new Audio(chime);
+    this.startPlayerBadgeLoginScanner = this.startPlayerBadgeLoginScanner.bind(this);
     this.navigateToKillScreen = this.navigateToKillScreen.bind(this);
     ps.getPlayers()
-      .then(this.startPlayerBadgeLoginScanner.bind(vm));
+      .then(this.startPlayerBadgeLoginScanner);
   }
 
   startPlayerBadgeLoginScanner() {
@@ -30,18 +31,18 @@ export default class PlayerSelectController {
             .then(() => vm.navigateToKillScreen())
         } else {
           vm.ss.stop()
-          vm.resetScanner();
+          vm.resetScanner(vm.startPlayerBadgeLoginScanner);
         }
       });
     })
   }
 
-  resetScanner() {
+  resetScanner(callback) {
     const vm = this;
     setTimeout(() => {
       vm.$scope.$apply(() => {
         vm.message = 'Scan badge...';
-        vm.startPlayerBadgeLoginScanner();
+        callback();
       })
     }, 2000);
   }

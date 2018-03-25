@@ -1,10 +1,48 @@
 const router = require('express').Router();
 const pool = require('../modules/pool');
-
+const query = require('../modules/query-functions');
+/* Kill reporting format
+{ 
+  killerId: 2,
+  killed: { 
+    EntityType: 'FactionLanyard',
+    EntityId: 1,
+    Level: 1,
+    Faction: 2
+  }
+}
+*/
 router.put('/killed',(req,res) => {
-  console.log('put killed hit.');
-  res.send('woop!');
-})
+  const { killerId, killed } = req.body;
+  const lanyardId = killed.EntityId;
+  let queryText = `SELECT * FROM "faction_lanyards" WHERE "id" = $1;`
+  let queryParams = [lanyardId];
+  query.queryWithParams(req,res,queryText,queryParams,(req,res,resultLanyard) => {
+    if (resultLanyard.rows[0].player_id === null)
+      res.status(200).send("Invalid kill. No player associated with that faction lanyard.");
+    else {
+      const level = resultLanyard.rows[0].level;
+      queryText = `
+        UPDATE "players" 
+        SET 
+          "xp" = "xp" + 1,
+          "credits" = "credits" + 3,
+          "score" = "score" + (50 * $1)
+          WHERE "id" = $2;`;
+      queryParams = [level,killerId];
+      query.queryWithParams(req,res,queryText,queryParams,(req,res,result) => {
+        queryText = `UPDATE "faction_lanyards" SET "player_id" = NULL WHERE "id" = $1;`;
+        queryParams = [lanyardId];
+        query.queryWithParams(req,res,queryText,queryParams,(req,res,result) => {
+          res.status(200).send({
+            message: "Kill credited.",
+            
+          });
+        });
+      });
+    }
+  });
+});
 
 
 // get all faction lanyards

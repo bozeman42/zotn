@@ -47,3 +47,8 @@ function queryNoParams(req,res,queryText,resultCallback) {
     }
   })
 }
+
+module.exports = {
+  query: queryNoParams,
+  queryWithParams: queryWithParams
+}

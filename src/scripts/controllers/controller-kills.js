@@ -9,7 +9,9 @@ export default class KillController {
     this.fs = FactionService;
     this.$scope = $scope;
     this.$location = $location;
+    this.$routeParams = $routeParams;
     this.data = this.ps.data;
+    this.startKillScanner = this.startKillScanner.bind(this);
     PlayerService.getPlayer($routeParams.id)
     .then((player)=>{
       this.data.currentPlayer = player;
@@ -39,7 +41,8 @@ export default class KillController {
         if (vm.isValidKillScan(killBadge)) {
           vm.processKill(killBadge);
         } else {
-          vm.resetScanner();
+          vm.message = "Invalid kill... please try again..."
+          vm.resetScanner(vm.startKillScanner);
         }
       });
     })
@@ -48,7 +51,7 @@ export default class KillController {
 //   {"EntityType":"FactionLanyard","EntityId":13, "Level":1, "Faction":1}
 
   isValidKillScan(content) {
-    return (content.EntityType === "faction_lanyard" && this.data.currentPlayer.isEnemyFaction(content.Faction))
+    return (content.EntityType === "FactionLanyard" && this.data.currentPlayer.isEnemyFaction(content.Faction))
   }
 
   processKilledLanyard(killBadge){
@@ -56,20 +59,44 @@ export default class KillController {
   }
   
   processKill(killBadge){
-    this.fs.processKilledLanyard(killBadge)
+    const vm = this;
+    console.log('processing kill',killBadge)
+    console.log('this',this);
+    const kill = {
+      killerId: this.data.currentPlayer.id,
+      killed: killBadge
+    }
+    this.fs.processKilledLanyard(kill)
     .then(() => {
-      // if (lanyard was assigned)
-      this.creditKill(this.data.player);
-      // else invalid kill
+      vm.ps.getPlayer(vm.$routeParams.id)
+      .then((player) => {
+        vm.data.currentPlayer = player;
+      });
+      vm.resetScanner(vm.startKillScanner);
     })
   }
 
   finalizeKills() {
-    this.$location.path('/death');
+    this.ss.stop()
+    .then(() => {
+      this.$scope.$apply(() => {
+        this.$location.path('/death');
+      });
+    })
   }
   
   creditKill(player){
     this.ps.creditKill(player);
+  }
+
+  resetScanner(callback) {
+    const vm = this;
+    setTimeout(() => {
+      vm.$scope.$apply(() => {
+        vm.message = 'Scan badge...';
+        callback();
+      })
+    }, 2000);
   }
 
 }
