@@ -1,5 +1,5 @@
-<div ng-class="{zombieGreen: kc.data.currentPlayer.isZombie(), hunterOrange: kc.data.currentPlayer.isHunter()}">
-  <h1>Welcome <img ng-src="{{kc.data.currentPlayer.icon}}" class="factionIcon"> {{kc.data.currentPlayer.nickname}}</h1>
+<div >
+  <h1>Welcome <img ng-src="{{kc.data.currentPlayer.icon}}" class="factionIcon" ng-class="{zombieGreen: kc.data.currentPlayer.isZombie(), hunterOrange: kc.data.currentPlayer.isHunter()}"> {{kc.data.currentPlayer.nickname}}</h1>
   <h2>{{kc.data.message}}</h2>
   <div class="playerInfoBox">
     <div><p>{{kc.data.currentPlayer.nickname}}</p></div>
