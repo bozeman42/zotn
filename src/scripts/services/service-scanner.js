@@ -77,6 +77,8 @@ export default class ScannerService {
         .catch((error) => {
           alert('Failed to stop', error);
         });
+    } else {
+      return Promise.resolve(true);
     }
   }
 }

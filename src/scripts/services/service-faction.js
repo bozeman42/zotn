@@ -11,6 +11,9 @@ export default class FactionService {
     .then((response) => {
       console.log('killed:',response);
     })
+    .catch((error) => {
+      console.log(error);
+    })
   }
 
   getUnassignedFactionBadges(){
