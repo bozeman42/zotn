@@ -99,7 +99,10 @@ export default class RegisterPlayerController {
         const lanyardId = content.EntityId;
         const playerId = vm.data.newPlayer.id;
         vm.message = "Thank you. One moment...";
-        vm.ss.stop();
+        console.log('scan faction badge about to stop');
+        vm.ss.stop()
+        .then(() => console.log('stopped'));
+        console.log('log after stop');
         vm.fs.attachPlayerToFactionLanyard(lanyardId, playerId)
         .then((response) => {
           if (response.data.id) {

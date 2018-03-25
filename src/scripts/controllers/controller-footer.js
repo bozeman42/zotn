@@ -1,6 +1,7 @@
 export default class {
-  constructor($location,ScannerService){
-    this.$inject = ['$location', 'ScannerService'];
+  constructor($location,$scope,ScannerService){
+    this.$inject = ['$location', '$scope','ScannerService'];
+    this.$scope = $scope;
     this.$location = $location;
     this.ss = ScannerService;
     
@@ -8,15 +9,23 @@ export default class {
 
   restart(){
     if (this.$location.path() !== '/'){
-      this.ss.stop();
+      this.ss.stop()
+      .then(() => {
+        this.$scope.$apply(() => {
+          this.$location.path('/');
+        });
+      });
     }
-    this.$location.path('/');
   }
 
   register() {
     if (this.$location.path() !== '/register'){
-      this.ss.stop();
+      this.ss.stop()
+      .then(() =>  {
+        this.$scope.$apply(() => {
+          this.$location.path('/register')
+        });
+      });
     }
-    this.$location.path('/register');
   }
 }
