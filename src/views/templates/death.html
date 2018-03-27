@@ -1,5 +1,13 @@
 <div>
-  {{dc.message}}
+  <h2>{{dc.message}}</h2>
   <button ng-click="dc.death()">Yes</button>
   <button ng-click="dc.noDeath()">No</button>
+  <div class="playerInfoBox">
+    <div><p>{{dc.data.currentPlayer.nickname}}</p></div>
+    <img ng-src="{{dc.data.currentPlayer.icon}}" class="factionIcon" ng-class="{zombieGreen: dc.data.currentPlayer.isZombie(), hunterOrange: dc.data.currentPlayer.isHunter()}">
+    <div><p>Level: {{dc.data.currentPlayer.level}}</p></div>
+    <div><p>XP: {{dc.data.currentPlayer.xp}}</p></div>
+    <div><p>Credits: {{dc.data.currentPlayer.credits}}</p></div>
+    <div><p>Score: {{dc.data.currentPlayer.score}}</p></div>
+  </div>
 </div>

@@ -3,9 +3,10 @@ import WebcamScanner from '../modules/webcamscanner';
 import scannerConfig, { DEDICATED_SCANNER, WEBCAM_SCANNER } from '../scanner.config';
 
 export default class ScannerService {
-  constructor($rootScope) {
-    this.$inject = ['$scope'];
+  constructor($rootScope,$timeout) {
+    this.$inject = ['$scope','$timeout'];
     this.$rootScope = $rootScope;
+    this.$timeout = $timeout;
     this.scanner = null;
     this.validateAndParseJSON = this.validateAndParseJSON.bind(this);
     this.activateScanIndicator = this.activateScanIndicator.bind(this);
@@ -63,6 +64,17 @@ export default class ScannerService {
     } catch (error) {
       console.error(error);
       return false;
+    }
+  }
+
+  reset(timeout) {
+    const vm = this;
+    console.log(vm.scanner);
+    if (vm.scanner) {
+      vm.scanner.stop();
+      return this.$timeout(() => {
+        vm.scanner.start();
+      },timeout,true);
     }
   }
 

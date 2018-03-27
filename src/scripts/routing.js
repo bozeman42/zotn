@@ -19,11 +19,11 @@ export default function ($routeProvider, $locationProvider) {
       templateUrl: '/views/templates/kills.html',
       controller: 'KillController as kc'
     })
-    .when('/death', {
+    .when('/death/:id', {
       templateUrl: '/views/templates/death.html',
       controller: 'DeathController as dc'
     })
-    .when('/shop', {
+    .when('/shop:id', {
       templateUrl: '/views/templates/shop.html',
       controller: 'ShopController as dc'
     })

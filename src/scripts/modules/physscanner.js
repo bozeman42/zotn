@@ -1,4 +1,4 @@
-import EventEmitter from 'events';
+import {EventEmitter} from 'events';
 
 export default class DedicatedScanner extends EventEmitter {
   constructor(callback) {
@@ -11,6 +11,7 @@ export default class DedicatedScanner extends EventEmitter {
     this.timeoutHandler = null;
     this.result = '';
     this.count = 0;
+
   }
 
   start() {
