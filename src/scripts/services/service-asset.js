@@ -126,4 +126,19 @@ export default class AssetService {
       console.error(error)
     });
   }
+
+  checkInBite(playerId,biteId) {
+    const data = {
+      playerId,
+      biteId
+    }
+    console.log(data);
+    return this.$http.put('/combat/bite',data)
+    .then((response) => {
+      console.log(response);
+    })
+    .catch((error) => {
+      console.error(error)
+    });
+  }
 }
