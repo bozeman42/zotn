@@ -18,6 +18,8 @@ export default class DeathController {
     this.ss = ScannerService;
     this.fs = FactionService;
     this.data = PlayerService.data;
+    this.askPlayerIfKilled = true;
+    this.scanningWeapons = false;
     this.playerWasKilled = false;
     this.message = '';
     this.weapon = '';
@@ -44,13 +46,11 @@ export default class DeathController {
       }
     }
 
-  noDeath() {
+  playerDied(playerWasKilled) {
+    this.askPlayerIfKilled = false;
+    this.scanningWeapons = true;
+    this.playerWasKilled = playerWasKilled;
     this.startBiteBulletScanner();
-  }
-
-  death() {
-    this.playerWasKilled = true;
-
   }
 
   startBiteBulletScanner() {
@@ -59,9 +59,16 @@ export default class DeathController {
     vm.ss.start((content) => {
       const weaponCard = content;
       if (vm.isBullet(weaponCard) && vm.data.currentPlayer.isZombie()) {
-        vm.as.checkInShot(vm.data.currentPlayer.id,weaponCard.EntityId);
-      } else if (vm.isBite(weaponCard) && vm.data.currentPlayer.isHunter()) {
+        vm.as.checkInShot(vm.data.currentPlayer.id,weaponCard.EntityId)
+        .then((result) => {
+          vm.ps.getPlayer(vm.data.currentPlayer.id);
 
+        });
+      } else if (vm.isBite(weaponCard) && vm.data.currentPlayer.isHunter()) {
+        vm.as.checkInBite(vm.data.currentPlayer.id,weaponCard.EntityId)
+        .then((result) => {
+          vm.ps.getPlayer(vm.data.currentPlayer.id);
+        });
       } else {
         vm.message = `Invalid ${vm.weapon}...`
         vm.ss.reset(1000)
@@ -78,6 +85,20 @@ export default class DeathController {
 
   isBite(weaponCard) {
     return (weaponCard.EntityType === "Bite");
+  }
+
+  doneScanningWeapons() {
+    const vm = this;
+    vm.ss.stop()
+    .then(vm.levelUp);
+  }
+
+  levelUp() {
+    const vm = this;
+    vm.ps.levelUp(vm.data.currentPlayer.id)
+    .then(() => {
+      vm.ps.getPlayer(vm.data.currentPlayer.id);
+    })
   }
 
   toPurchase() {

@@ -1,7 +1,12 @@
 <div>
   <h2>{{dc.message}}</h2>
-  <button ng-click="dc.death()">Yes</button>
-  <button ng-click="dc.noDeath()">No</button>
+  <div ng-if="dc.askPlayerIfKilled">
+    <button ng-click="dc.playerDied(true)">Yes</button>
+    <button ng-click="dc.playerDied(false)">No</button>
+  </div>
+  <div ng-if="dc.scanningWeapons">
+    <button ng-click="dc.doneScanningWeapons()">Done</button>
+  </div>
   <div class="playerInfoBox">
     <div><h3>{{dc.data.currentPlayer.nickname}}</h3></div>
     <img ng-src="{{dc.data.currentPlayer.icon}}" class="factionIcon" ng-class="{zombieGreen: dc.data.currentPlayer.isZombie(), hunterOrange: dc.data.currentPlayer.isHunter()}">
