@@ -13,6 +13,7 @@ export default class DeathController {
     this.$location = $location;
     this.$routeParams = $routeParams;
     this.$scope = $scope;
+    this.as = AssetService;
     this.ps = PlayerService;
     this.ss = ScannerService;
     this.fs = FactionService;
@@ -44,38 +45,39 @@ export default class DeathController {
     }
 
   noDeath() {
-    this.message = `Please scan all ${this.weapon}s you received.`;
     this.startBiteBulletScanner();
   }
 
   death() {
-    this.ss.reset();
+    this.playerWasKilled = true;
+
   }
 
   startBiteBulletScanner() {
+    this.message = `Please scan all ${this.weapon}s you received.`;
     const vm = this;
     vm.ss.start((content) => {
       const weaponCard = content;
-      if (vm.isBullet(weaponCard)) {
-
-      } else if (vm.isBite(weaponCard)) {
+      if (vm.isBullet(weaponCard) && vm.data.currentPlayer.isZombie()) {
+        vm.as.checkInShot(vm.data.currentPlayer.id,weaponCard.EntityId);
+      } else if (vm.isBite(weaponCard) && vm.data.currentPlayer.isHunter()) {
 
       } else {
         vm.message = `Invalid ${vm.weapon}...`
         vm.ss.reset(1000)
         .then(() => {
-          vm.selectMessageAndWeapon()
+          this.message = `Please scan all ${this.weapon}s you received.`;
         })
       }
     })
   }
 
   isBullet(weaponCard){
-    // is weaponCard a valid bullet?
+    return (weaponCard.EntityType === "Bullet");
   }
 
   isBite(weaponCard) {
-    // is weaponCard a valid bite card?
+    return (weaponCard.EntityType === "Bite");
   }
 
   toPurchase() {

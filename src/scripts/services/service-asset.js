@@ -111,4 +111,19 @@ export default class AssetService {
       );
     });
   }
+
+  checkInShot(playerId,bulletId) {
+    const data = {
+      playerId,
+      bulletId
+    }
+    console.log(data);
+    return this.$http.put('/combat/bullet',data)
+    .then((response) => {
+      console.log(response);
+    })
+    .catch((error) => {
+      console.error(error)
+    });
+  }
 }
