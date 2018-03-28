@@ -1,7 +1,7 @@
 # Zombies of the North
 
 ## Description
-Zombies of the North is a multiplayer, hunters vs zombies game to be played at conventions. This application manages the players and all game assets. At this time I am not granting any license for this software. Copyright © 2018 Aaron Kvarnlov-Leverty
+Zombies of the North is a multiplayer, hunters vs zombies game to be played at conventions using QR coded game assets that are checked in via a webcam or HID QR code scanner. This application manages the players and all game assets. At this time I am not granting any license for this software. Copyright © 2018 Aaron Kvarnlov-Leverty
 
 ## Pre-requisites
 1. Install postgres
