@@ -16,18 +16,6 @@ export default class PlayerService {
     this.$http = $http;
     this.getPlayers();
   }
-  
-  // getCounts() {
-  //   const vm = this;
-  //   return vm.$http.get('/players/counts')
-  //   .then((result) => {
-  //     const { hunter_count, zombie_count, player_count } = result.data[0];
-  //     vm.data.counts.hunterCount = parseInt(hunter_count);
-  //     vm.data.counts.zombieCount = parseInt(zombie_count);
-  //     vm.data.counts.playerCount = parseInt(player_count);
-  //   })
-  //   .catch((error) => console.log('error getting count',error));
-  // }
 
   getPlayers() {
     let vm = this;
@@ -80,7 +68,20 @@ export default class PlayerService {
     })
   }
 
+  refreshCurrentPlayer(id) {
+    const vm = this;
+    return vm.getPlayer(id)
+    .then(() => {
+      vm.data.currentPlayer = vm.data.players[id];
+    })
+  }
+
   creditKill(player){
     console.log('playerService creditKill player:',player);
+  }
+
+  levelUp(id) {
+    const vm = this;
+    return vm.$http.put(`/players/levelup/${id}`)
   }
 }

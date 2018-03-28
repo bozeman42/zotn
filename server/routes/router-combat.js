@@ -56,7 +56,7 @@ router.put('/bite', (req, res) => {
     `SELECT
       (SELECT "faction" FROM "players" WHERE "id" = $1) AS "playerFaction",
       (SELECT "hunter_level" FROM "players" WHERE "id" = $1) AS "playerLevel",
-      (SELECT "player_id" FROM "bites" WHERE "bullet_id" = $2) AS "biteOwner";`
+      (SELECT "player_id" FROM "bites" WHERE "bite_id" = $2) AS "biteOwner";`
     ,
     [playerId, biteId],
     (req, res, result) => {
