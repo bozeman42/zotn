@@ -1,6 +1,7 @@
 const router = require('express').Router();
 const pool = require('../modules/pool');
 const Query = require('../modules/Query');
+
 /* Kill reporting format
 { 
   killerId: 2,
@@ -186,7 +187,5 @@ router.put('/badges/attach',(req,res) => {
     }
   })
 })
-
-router.put('/')
 
 module.exports = router;

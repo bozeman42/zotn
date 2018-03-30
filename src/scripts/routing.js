@@ -7,6 +7,7 @@ import '../views/templates/register.html';
 import '../views/templates/register-asset.html';
 import '../views/templates/404.html';
 import '../views/partials/footer.html';
+import '../views/partials/header.html';
 
 export default function ($routeProvider, $locationProvider) {
   $locationProvider.hashPrefix('');

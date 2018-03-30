@@ -1,15 +1,16 @@
 import { HUNTER, ZOMBIE } from '../constants/factions';
 
 export default class DeathController {
-  constructor($location,$routeParams,$scope,AssetService,FactionService,PlayerService,ScannerService){
+  constructor($location, $routeParams, $scope, AssetService, FactionService, PlayerService, ScannerService) {
     this.$inject = [
       '$location',
       '$routeParams',
       '$scope',
       'AssetService',
-      'FactionService'];
+      'FactionService',
       'PlayerService',
-      'ScannerService',
+      'ScannerService'
+    ]
     this.$location = $location;
     this.$routeParams = $routeParams;
     this.$scope = $scope;
@@ -23,28 +24,29 @@ export default class DeathController {
     this.playerWasKilled = false;
     this.message = '';
     this.weapon = '';
+    this.levelUp = this.levelUp.bind(this);
     PlayerService.getPlayer($routeParams.id)
-    .then((player) => {
-      this.data.currentPlayer = player;
-      this.selectMessageAndWeapon();
-    })
+      .then((player) => {
+        this.data.currentPlayer = player;
+        this.selectMessageAndWeapon();
+      })
   }
-  
-    selectMessageAndWeapon() {
-      const hunterMsg = "Did a zombie bite and kill you?";
-      const zombieMsg = "Were you killed by a hunter?";
-      const bite = "bite";
-      const bullet = "bullet";
-      const player = this.data.currentPlayer;
-      console.log('player',player);
-      if (player.isHunter()) {
-        this.message = hunterMsg;
-        this.weapon = bite;
-      } else if (player.isZombie()) {
-        this.message = zombieMsg;
-        this.weapon = bullet;
-      }
+
+  selectMessageAndWeapon() {
+    const hunterMsg = "Did a zombie bite and kill you?";
+    const zombieMsg = "Were you killed by a hunter?";
+    const bite = "bite";
+    const bullet = "bullet";
+    const player = this.data.currentPlayer;
+    console.log('player', player);
+    if (player.isHunter()) {
+      this.message = hunterMsg;
+      this.weapon = bite;
+    } else if (player.isZombie()) {
+      this.message = zombieMsg;
+      this.weapon = bullet;
     }
+  }
 
   playerDied(playerWasKilled) {
     this.askPlayerIfKilled = false;
@@ -59,27 +61,26 @@ export default class DeathController {
     vm.ss.start((content) => {
       const weaponCard = content;
       if (vm.isBullet(weaponCard) && vm.data.currentPlayer.isZombie()) {
-        vm.as.checkInShot(vm.data.currentPlayer.id,weaponCard.EntityId)
-        .then((result) => {
-          vm.ps.getPlayer(vm.data.currentPlayer.id);
-
-        });
+        vm.as.checkInShot(vm.data.currentPlayer.id, weaponCard.EntityId)
+          .then((result) => {
+            vm.ps.refreshCurrentPlayer(vm.data.currentPlayer.id);
+          });
       } else if (vm.isBite(weaponCard) && vm.data.currentPlayer.isHunter()) {
-        vm.as.checkInBite(vm.data.currentPlayer.id,weaponCard.EntityId)
-        .then((result) => {
-          vm.ps.getPlayer(vm.data.currentPlayer.id);
-        });
+        vm.as.checkInBite(vm.data.currentPlayer.id, weaponCard.EntityId)
+          .then((result) => {
+            vm.ps.refreshCurrentPlayer(vm.data.currentPlayer.id);
+          });
       } else {
         vm.message = `Invalid ${vm.weapon}...`
         vm.ss.reset(1000)
-        .then(() => {
-          this.message = `Please scan all ${this.weapon}s you received.`;
-        })
+          .then(() => {
+            this.message = `Please scan all ${this.weapon}s you received.`;
+          })
       }
     })
   }
 
-  isBullet(weaponCard){
+  isBullet(weaponCard) {
     return (weaponCard.EntityType === "Bullet");
   }
 
@@ -89,16 +90,19 @@ export default class DeathController {
 
   doneScanningWeapons() {
     const vm = this;
+    vm.scanningWeapons = false;
     vm.ss.stop()
-    .then(vm.levelUp);
+      .then(vm.levelUp);
   }
 
   levelUp() {
     const vm = this;
+    vm.message = "Processing XP..."
     vm.ps.levelUp(vm.data.currentPlayer.id)
-    .then(() => {
-      vm.ps.getPlayer(vm.data.currentPlayer.id);
-    })
+      .then((response) => {
+        vm.message = response.data.leveledUp? "Leveled up!":"Thank you.";
+        vm.ps.refreshCurrentPlayer(vm.data.currentPlayer.id);
+      })
   }
 
   toPurchase() {

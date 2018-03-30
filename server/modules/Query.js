@@ -54,6 +54,33 @@ class Query {
     })
   }
 
+  atomicQueries(queryTextArray,queryDataArray,resultCallback){
+    pool.connect((connectError,client,done) => {
+      if (connectError) {
+        console.error("Database Connection Error", connectError);
+        this.res.status(500).send({
+          message: "Database connection error",
+          error: connectError
+        });
+      } else {
+        client.query("BEGIN TRANSACTION;");
+        queryTextArray.forEach((queryText,index) => {
+          client.query(queryText,queryDataArray[index]);
+        });
+      }
+      client.query("COMMIT;",(queryError,result) => {
+        if (queryError) {
+          this.res.status(500).send({
+            message: "Database query error",
+            error: queryError
+          });
+        } else {
+          resultCallback(req,res,result);
+        }
+      })
+    })
+  }
+
 }
 
 module.exports = Query;

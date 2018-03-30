@@ -1,7 +1,10 @@
 const router = require('express').Router();
 const pool = require('../modules/pool');
 const FactionCounts = require('../modules/faction-counts');
+const Query = require('../modules/Query');
 const fc = new FactionCounts;
+const HUNTER = 1;
+const ZOMBIE = 2;
 
 router.get('/',(req,res) => {
   pool.connect((connectError,client,done) => {
@@ -140,5 +143,69 @@ router.put('/name',(req,res) => {
     }
   })
 })
+
+const levelUpXp = {
+  // huter is faction 1
+  1: {
+    1: 3,
+    2: 5,
+    3: 7,
+    4: 9
+  },
+  // zombie is faction 2
+  2: {
+    1: 5,
+    2: 7,
+    3: 9,
+    4: 11
+  }
+}
+
+router.put('/levelup/:id',(req,res) => {
+  const id = parseInt(req.params.id);
+  const query = new Query(req,res);
+  query.withParams(
+    `SELECT "faction","hunter_level","zombie_level","xp" FROM "players" WHERE "id" = $1;`,
+    [id],
+    (req,res,result) => {
+      let {
+        faction,
+        zombie_level,
+        hunter_level,
+        xp
+      } = result.rows[0];
+      let level;
+      let factionName;
+      if (faction === HUNTER){
+        level = hunter_level;
+        factionName = "hunter";
+      } else if (faction === ZOMBIE) {
+        level = zombie_level;
+        factionName = "zombie"
+      }
+      let leveledUp = false;
+      while (level < 5 && xp >= levelUpXp[faction][level]) {
+        leveledUp = true;
+        xp -= levelUpXp[faction][level];
+        level += 1;
+      }
+      if (leveledUp) {
+        query.withParams(
+          `UPDATE "players" SET "${factionName}_level" = $1,"xp" = $2 WHERE "id" = $3;`,
+          [level,xp,id],
+          (req,res,result) => {
+            res.status(200).send({
+              leveledUp: true
+            });
+          }
+        );
+      } else {
+        res.status(200).send({
+          leveledUp: false
+        });
+      }
+    }
+  );
+});
 
 module.exports = router;
