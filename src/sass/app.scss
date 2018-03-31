@@ -52,16 +52,28 @@ header {
 }
 
 .factionIcon {
+  margin: 5px;
   height: 48px;
   width: 48px;
-  border: 1px black solid;
+  box-shadow: 2px 2px 2px #777;
   border-radius: 3px;
+}
+
+@keyframes zombie-waggle {
+  0%, 100% {
+    transform: rotate(-4deg) scale(1.02);
+
+  }
+  50% {
+    transform: rotate(-5deg) scale(1);
+  }
 }
 
 .zombie-font {
   color: red;
   font-family: 'Creepster', cursive;
-  transform: rotate(-5deg) scale(1.10);
+  animation: zombie-waggle 5s infinite;
+  font-size: 4rem;
 }
 
 .header-font {
