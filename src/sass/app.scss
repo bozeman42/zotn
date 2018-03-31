@@ -2,6 +2,10 @@ h1 {
   color: black;
 }
 
+body {
+  background-color: #CCC;
+}
+
 .container {
   width: 80%;
 }
@@ -15,34 +19,53 @@ body {
 }
 
 header {
-  height: 200px;
+  margin: 0;
+  height: 100px;
   background-color: black;
+  color: whitesmoke;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  div {
+    display: inline-block;
+    text-align: center;
+    margin: 10px;
+  }
 }
 
-.barcode {
-  height: 100px;
-  width: 100px;
+.drop-shadow {
+  box-shadow: 2px 2px 4px #777;
 }
+
+.larger-text {
+  font-size: 3.5rem;
+}
+
+.playerInfo {
+  padding: 10px;
+  background-color: whitesmoke;
+  margin: 15px;
+  display: inline-block;
+  border-radius: 5px;
+  margin: 5px;
+}
+
 .factionIcon {
   height: 48px;
   width: 48px;
+  border: 1px black solid;
+  border-radius: 3px;
 }
 
-header {
-  color: white;
-  .zombie-font {
-    color: red;
-    font-family: 'Creepster', cursive;
-  }
-  .header-font {
-    font-family: 'Alfa Slab One', cursive;
-  }
-  div {
-    display: inline-block;
-  }
-  .larger-text {
-    font-size: 3.5rem;
-  }
+.zombie-font {
+  color: red;
+  font-family: 'Creepster', cursive;
+  transform: rotate(-5deg) scale(1.10);
+}
+
+.header-font {
+  font-family: 'Alfa Slab One', cursive;
 }
 
 .zombieGreen {
@@ -62,8 +85,11 @@ header {
   background-color: #444;
 }
 
-#scannerIndicator.scanLight {
-  background-color: #00ff00; 
+#scannerIndicator.goodScanLight {
+  background-color: #0F0;
+}
+#scannerIndicator.badScanLight {
+  background-color: #F00;
 }
 
 .newFactionIcon {
@@ -73,7 +99,7 @@ header {
 
 #footer {
   background-color: #222;
-  display:flex;
+  display: flex;
   justify-content: center;
   color: whitesmoke;
   z-index: 1;
@@ -85,7 +111,7 @@ header {
     color: deepskyblue;
   }
   #footer-content {
-    display:flex;
+    display: flex;
     align-items: center;
     padding-top: 5px;
     padding-bottom: 5px;

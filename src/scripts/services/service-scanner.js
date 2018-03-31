@@ -1,6 +1,7 @@
 import DedicatedScanner from '../modules/physscanner';
 import WebcamScanner from '../modules/webcamscanner';
 import scannerConfig, { DEDICATED_SCANNER, WEBCAM_SCANNER } from '../scanner.config';
+import commonEmitter from '../modules/common-emitter';
 
 export default class ScannerService {
   constructor($rootScope,$timeout) {
@@ -9,7 +10,6 @@ export default class ScannerService {
     this.$timeout = $timeout;
     this.scanner = null;
     this.validateAndParseJSON = this.validateAndParseJSON.bind(this);
-    this.activateScanIndicator = this.activateScanIndicator.bind(this);
     this.scanLight = false;
   }
 
@@ -18,6 +18,7 @@ export default class ScannerService {
   // validated as JSON and parsed into JS objects before being passed to callbacks.
   start(callback, element = null) {
     const vm = this;
+    commonEmitter.emit('scanner-started');
     const validatedCallback = vm.validateAndParseJSON(callback);
     if (scannerConfig.type === DEDICATED_SCANNER) {
       this.scanner = new DedicatedScanner(validatedCallback);
@@ -27,22 +28,7 @@ export default class ScannerService {
       console.error("Unknown scanner type. Please check scanner.config.js");
     }
     this.scanner.start();
-    this.scanner.addListener('scan', this.activateScanIndicator);
-  }
-
-  activateScanIndicator(event) {
-    const vm = this;
-    let indicatorReset = () => {
-      this.$rootScope.$apply(() => {
-        this.scanLight = false;
-      })
-    }
-    indicatorReset = indicatorReset.bind(vm);
-    this.$rootScope.$apply(() => {
-      this.scanLight = true;
-    })
-    this.scanLight;
-    setTimeout(indicatorReset, 500);
+    this.scanner.addListener('scan', this.dispatchScan);
   }
 
   // accept a callback function and return a function that verifies that the input is JSON
@@ -81,7 +67,8 @@ export default class ScannerService {
   stop() {
     const vm = this;
     if (vm.scanner) {
-      this.scanner.removeListener('scan', this.activateScanIndicator);
+      commonEmitter.emit('scanning-stopped')
+      vm.scanner.removeAllListeners();
       return vm.scanner.stop()
         .then(() => {
           vm.scanner = null;
@@ -92,5 +79,10 @@ export default class ScannerService {
     } else {
       return Promise.resolve(true);
     }
+  }
+
+  dispatchScan(content){
+    console.log('dispatching scan');
+    commonEmitter.emit('scan',content);
   }
 }

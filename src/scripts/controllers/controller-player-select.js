@@ -1,4 +1,5 @@
 import chime from '../../assets/sounds/electronic_chime.mp3';
+import commonEmitter from '../modules/common-emitter';
 // injected dependencies:
 // PlayerService
 
@@ -62,13 +63,16 @@ export default class PlayerSelectController {
     badge = content
     if (!vm.isBadgeValid(badge)) {
       vm.message = "Please scan a valid player badge.";
+      commonEmitter.emit('bad-scan');
       result = false;
     } else if (!vm.playerExists(badge)) {
+      commonEmitter.emit('bad-scan');
       vm.message = "This badge is not associated with a player account.";
       result = false;
     } else {
       vm.setCurrentPlayer(badge);
       chime.play();
+      commonEmitter.emit('good-scan');
       // const welcome = new SpeechSynthesisUtterance(`Hello, ${this.data.currentPlayer.nickname}. Identity confirmed.`)
       // speechSynthesis.speak(welcome);
       result = true;
