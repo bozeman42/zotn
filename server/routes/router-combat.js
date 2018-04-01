@@ -54,9 +54,10 @@ router.put('/bite', (req, res) => {
   const query = new Query(req, res);
   query.withParams(
     `SELECT
-      (SELECT "faction" FROM "players" WHERE "id" = $1) AS "playerFaction",
-      (SELECT "hunter_level" FROM "players" WHERE "id" = $1) AS "playerLevel",
-      (SELECT b."player_id" AS biteOwner,p."nickname" as biteOwnerName FROM "bites" AS b JOIN "players" AS p ON WHERE b."bite_id" = $2;`
+    (SELECT "faction" FROM "players" WHERE "id" = $1) AS "playerFaction",
+    (SELECT "hunter_level" FROM "players" WHERE "id" = $1) AS "playerLevel",
+    (SELECT "player_id" FROM "bites"  WHERE "bite_id" = $2) AS "biteOwner",
+    (SELECT p."nickname" as "biteOwnerName" FROM "bites" AS b JOIN "players" AS p ON b.player_id = p.id WHERE b."bite_id" = $2);`
     ,
     [playerId, biteId],
     (req, res, result) => {

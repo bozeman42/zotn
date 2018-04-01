@@ -135,6 +135,7 @@ export default class AssetService {
     console.log(data);
     return this.$http.put('/combat/bite',data)
     .then((response) => {
+      return response;
       console.log(response);
     })
     .catch((error) => {

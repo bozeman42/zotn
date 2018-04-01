@@ -68,7 +68,8 @@ export default class DeathController {
       } else if (vm.isBite(weaponCard) && vm.data.currentPlayer.isHunter()) {
         vm.as.checkInBite(vm.data.currentPlayer.id, weaponCard.EntityId)
           .then((result) => {
-            const { bitBy } = result;
+            console.log(result);
+            const { bitBy } = result.data;
             vm.message = `You were bit by ${bitBy.name}`;
             vm.ps.refreshCurrentPlayer(vm.data.currentPlayer.id);
           });
