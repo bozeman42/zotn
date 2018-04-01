@@ -34,8 +34,14 @@ header {
   }
 }
 
+.stacked-text {
+  top: -1px;
+  line-height: .9;
+  font-size: 1.6rem;
+}
+
 .drop-shadow {
-  box-shadow: 2px 2px 4px #777;
+  box-shadow: 2px 2px 6px #777;
 }
 
 button:active.drop-shadow{
@@ -61,7 +67,7 @@ button:active.drop-shadow{
   margin: 5px;
   height: 48px;
   width: 48px;
-  box-shadow: 2px 2px 2px #777;
+  box-shadow: 2px 2px 6px #777;
   border-radius: 3px;
 }
 

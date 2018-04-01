@@ -68,6 +68,8 @@ export default class DeathController {
       } else if (vm.isBite(weaponCard) && vm.data.currentPlayer.isHunter()) {
         vm.as.checkInBite(vm.data.currentPlayer.id, weaponCard.EntityId)
           .then((result) => {
+            const { bitBy } = result;
+            vm.message = `You were bit by ${bitBy.name}`;
             vm.ps.refreshCurrentPlayer(vm.data.currentPlayer.id);
           });
       } else {
@@ -100,8 +102,12 @@ export default class DeathController {
     vm.message = "Processing XP..."
     vm.ps.levelUp(vm.data.currentPlayer.id)
       .then((response) => {
-        vm.message = response.data.leveledUp? "Leveled up!":"Thank you.";
-        vm.ps.refreshCurrentPlayer(vm.data.currentPlayer.id);
+        if (response.data.leveledUp){
+          vm.ps.refreshCurrentPlayer(vm.data.currentPlayer.id);
+          vm.message = "Level up!";
+        }
+
+
       })
   }
 
