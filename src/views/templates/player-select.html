@@ -5,6 +5,6 @@
   <video id="scanPreview" height="100" width="200"></video>
 </div>
 <div ng-repeat="player in psc.data.players" >
-  <button ng-click="psc.selectPlayer(player)">Select</button>
+  <button class="btn btn-primary drop-shadow" ng-click="psc.selectPlayer(player)">Select</button>
   <player-info player="player"></player-info>
 </div>

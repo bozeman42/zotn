@@ -38,6 +38,12 @@ header {
   box-shadow: 2px 2px 4px #777;
 }
 
+button:active.drop-shadow{
+  position: relative;
+  top: 2px;
+  left: 2px;
+}
+
 .larger-text {
   font-size: 3.5rem;
 }
@@ -74,6 +80,12 @@ header {
   font-family: 'Creepster', cursive;
   animation: zombie-waggle 5s infinite;
   font-size: 4rem;
+}
+
+.stacked-text {
+  text-align: center;
+  line-height: 1;
+  font-size: 1.5rem;
 }
 
 .header-font {
