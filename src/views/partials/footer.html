@@ -1,11 +1,11 @@
 <div id="footer" ng-controller="FooterController as vm">
   <div id="footer-content">
-    <div id="scannerIndicator" ng-class="{ goodScanLight: vm.goodScanLight , badScanLight: vm.badScanLight}"></div>
     <button ng-click="vm.restart()">&lang;&lang; BACK</button>
-
+    
     <button ng-click="vm.register()">New Player</button>
-
+    
     Zombie Icon from
     <a href="http://icons8.com">Icons8</a>
+    <div id="scannerIndicator" ng-class="{ goodScanLight: vm.goodScanLight , badScanLight: vm.badScanLight}"></div>
   </div>
 </div>

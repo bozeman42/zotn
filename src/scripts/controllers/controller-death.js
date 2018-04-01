@@ -100,8 +100,12 @@ export default class DeathController {
     vm.message = "Processing XP..."
     vm.ps.levelUp(vm.data.currentPlayer.id)
       .then((response) => {
-        vm.message = response.data.leveledUp? "Leveled up!":"Thank you.";
-        vm.ps.refreshCurrentPlayer(vm.data.currentPlayer.id);
+        if (response.data.leveledUp){
+          vm.ps.refreshCurrentPlayer(vm.data.currentPlayer.id);
+          vm.message = "Level up!";
+        }
+        
+
       })
   }
 
