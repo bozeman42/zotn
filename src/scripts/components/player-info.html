@@ -1,7 +1,6 @@
 <div class="playerInfo drop-shadow">
   <h3>{{$ctrl.player.nickname}}</h3>
   <div class="float-left">
-    <button ng-if="$ctrl.select">Select</button>
     <img class="factionIcon" ng-class="{zombieGreen: $ctrl.player.isZombie(), hunterOrange: $ctrl.player.isHunter()}" ng-src="{{$ctrl.player.icon}}" />
   </div>
   <div class="float-right">
