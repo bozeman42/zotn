@@ -11,12 +11,13 @@ router.put('/bullet', (req, res) => {
     `SELECT
       (SELECT "faction" FROM "players" WHERE "id" = $1) AS "playerFaction",
       (SELECT "zombie_level" FROM "players" WHERE "id" = $1) AS "playerLevel",
-      (SELECT "player_id" FROM "bullets" WHERE "bullet_id" = $2) AS "bulletOwner";`
+      (SELECT "player_id" FROM "bullets" WHERE "bullet_id" = $2) AS "bulletOwner",
+      (SELECT p."nickname" as "bulletOwnerName" FROM "bullets" AS b JOIN "players" AS p ON b.player_id = p.id WHERE b."bullet_id" = $2);`
     ,
     [playerId, bulletId],
     (req, res, result) => {
       console.log(result.rows[0]);
-      const { playerFaction, playerLevel, bulletOwner } = result.rows[0]
+      const { playerFaction, playerLevel, bulletOwner, bulletOwnerName } = result.rows[0]
       if (playerFaction === ZOMBIE && bulletOwner !== null) {
         pool.connect((connectError, client, done) => {
           if (connectError) {
@@ -37,7 +38,13 @@ router.put('/bullet', (req, res) => {
                   error: queryError
                 });
               } else {
-                res.status(200).send('Credited.');
+                res.status(200).send({
+                  message: 'Credited',
+                  shotBy: {
+                    id: bulletOwner,
+                    name: bulletOwnerName
+                  }
+                });
               }
             })
           }

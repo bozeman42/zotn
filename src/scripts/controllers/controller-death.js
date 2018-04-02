@@ -63,6 +63,8 @@ export default class DeathController {
       if (vm.isBullet(weaponCard) && vm.data.currentPlayer.isZombie()) {
         vm.as.checkInShot(vm.data.currentPlayer.id, weaponCard.EntityId)
           .then((result) => {
+            const { shotBy } = result.data;
+            this.message = `You were shot by ${shotBy.name}!`;
             vm.ps.refreshCurrentPlayer(vm.data.currentPlayer.id);
           });
       } else if (vm.isBite(weaponCard) && vm.data.currentPlayer.isHunter()) {
@@ -106,9 +108,8 @@ export default class DeathController {
         if (response.data.leveledUp){
           vm.ps.refreshCurrentPlayer(vm.data.currentPlayer.id);
           vm.message = "Level up!";
+          
         }
-
-
       })
   }
 
