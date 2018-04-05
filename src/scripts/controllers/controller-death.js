@@ -123,7 +123,7 @@ export default class DeathController {
       })
   }
 
-  async exchangeLanyards(){
+  async exchangeLanyards() {
     const vm = this;
     await this.ps.getPlayer(vm.data.currentPlayer.id);
     vm.data.currentPlayer = vm.data.players[vm.data.currentPlayer.id];
@@ -132,17 +132,23 @@ export default class DeathController {
         vm.toPurchase();
       })
     } else {
-      if(vm.playerHasLanyard()) {
+      if (vm.playerHasLanyard()) {
         vm.returnLanyard(vm.data.currentPlayer)
-        .then(() => {
-          vm.getNewLanyard(vm.data.currentPlayer)
-        })
-        .catch(error => {
-          console.error(error);
-          vm.exchangeLanyards();
-        })
+          .then(() => {
+            vm.getNewLanyard(vm.data.currentPlayer)
+          })
+          .catch(error => {
+            console.error(error);
+            vm.exchangeLanyards();
+          })
       } else {
-        vm.getNewLanyard(vm.data.currentPlayer);
+        if (vm.playerWasKilled) {
+          await vm.ps.processDeath(vm.data.currentPlayer.id);
+          await vm.ps.getPlayer(vm.data.currentPlayer.id);
+          this.$scope.$apply(() => {
+            vm.getNewLanyard(vm.data.currentPlayer);
+          })
+        }
       }
     }
   }
@@ -151,20 +157,21 @@ export default class DeathController {
   getNewLanyard(player) {
     const vm = this;
     console.log('getNewLanyard');
-    this.$scope.$apply(() => {
-      this.message = `Please scan a ${player.factionName} level ${player.level} badge...`;
-      this.ss.start((content) => {
-        if (content.EntityType === 'FactionLanyard' && content.Faction === player.faction && content.Level === player.level) {
-          this.fs.attachPlayerToFactionLanyard(content.EntityId, player.id)
+    this.message = `Please scan a ${player.factionName} level ${player.level} badge...`;
+    this.ss.start((content) => {
+      if (content.EntityType === 'FactionLanyard' && content.Faction === player.faction && content.Level === player.level) {
+        this.fs.attachPlayerToFactionLanyard(content.EntityId, player.id)
           .then((response) => {
             console.log(response);
             this.toPurchase();
           })
-          .catch(err => console.error(err));
-        } else {
-          vm.message = 'Incorrect faction, level, or asset type.';
-        }
-      });
+          .catch(err => {
+            console.error(err);
+            this.getNewLanyard(player);
+          });
+      } else {
+        vm.message = 'Incorrect faction, level, or asset type.';
+      }
     });
   }
 
@@ -173,7 +180,7 @@ export default class DeathController {
   }
 
   returnLanyard(player) {
-    return new Promise((resolve,reject) => {
+    return new Promise((resolve, reject) => {
       this.$scope.$apply(() => {
         this.message = "Please scan and return your current faction lanyard."
       })
@@ -181,12 +188,12 @@ export default class DeathController {
         console.log('returning', content);
         if (content.EntityType === 'FactionLanyard') {
           this.fs.detachPlayerFromFactionLanyard(content.EntityId, player.id)
-          .then(response => {
-            resolve();
-          })
-          .catch(error => {
-            reject(error);
-          });
+            .then(response => {
+              resolve();
+            })
+            .catch(error => {
+              reject(error);
+            });
         } else {
           reject('Wrong entity type');
         }

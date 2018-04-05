@@ -59,9 +59,6 @@ export default class FactionService {
       playerId: playerId
     }
     return this.$http.put('/faction/badges/attach',data)
-    .catch((error) => {
-      console.error('error attaching lanyard',error);
-    })
   }
 
   detachPlayerFromFactionLanyard(lanyardId,playerId) {

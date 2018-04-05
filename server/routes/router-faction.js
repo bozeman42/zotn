@@ -180,7 +180,7 @@ router.put('/badges/attach',(req,res) => {
             if (result.rowCount){
               res.send(result.rows[0]);
             } else {
-              res.sendStatus(200);
+              res.status(500).send('Lanyard in use.');
             }
           }
         })
