@@ -6,8 +6,8 @@ const fc = new FactionCounts;
 const HUNTER = 1;
 const ZOMBIE = 2;
 
-router.get('/',(req,res) => {
-  pool.connect((connectError,client,done) => {
+router.get('/', (req, res) => {
+  pool.connect((connectError, client, done) => {
     if (connectError) {
       res.status(500).send({
         message: 'Database connection error',
@@ -15,7 +15,7 @@ router.get('/',(req,res) => {
       });
     } else {
       const queryText = 'SELECT * FROM players';
-      client.query(queryText,(queryError,result) => {
+      client.query(queryText, (queryError, result) => {
         done();
         if (queryError) {
           res.status(500).send({
@@ -30,10 +30,10 @@ router.get('/',(req,res) => {
   });
 });
 
-router.get('/:id',(req,res) => {
+router.get('/:id', (req, res) => {
   const { id } = req.params;
-  console.log('id',id)
-  pool.connect((connectError,client,done) => {
+  console.log('id', id)
+  pool.connect((connectError, client, done) => {
     if (connectError) {
       console.error(connectError);
       res.status(500).send({
@@ -42,7 +42,7 @@ router.get('/:id',(req,res) => {
       });
     } else {
       const queryText = "SELECT * FROM players WHERE id = $1;";
-      client.query(queryText,[id],(queryError,result) => {
+      client.query(queryText, [id], (queryError, result) => {
         done();
         if (queryError) {
           console.error(queryError);
@@ -58,8 +58,8 @@ router.get('/:id',(req,res) => {
   });
 });
 
-router.get('/counts',(req,res) => {
-  pool.connect((connectError,client,done) => {
+router.get('/counts', (req, res) => {
+  pool.connect((connectError, client, done) => {
     if (connectError) {
       res.sendStatus(500);
     } else {
@@ -67,7 +67,7 @@ router.get('/counts',(req,res) => {
       (SELECT COUNT(*) FROM "players" WHERE "faction" = 1) as "hunter_count",
       (SELECT COUNT(*) FROM "players" WHERE "faction" = 2) as "zombie_count",
       (SELECT COUNT(*) FROM "players") as "player_count";`;
-      client.query(queryText,(queryError,result) => {
+      client.query(queryText, (queryError, result) => {
         done();
         if (queryError) {
           res.sendStatus(500);
@@ -79,9 +79,9 @@ router.get('/counts',(req,res) => {
   })
 });
 
-router.post('/new',(req,res) => {
+router.post('/new', (req, res) => {
   const { id } = req.body;
-  pool.connect((connectError,client,done) => {
+  pool.connect((connectError, client, done) => {
     if (connectError) {
       res.status(500).send({
         message: "Error connecting to database",
@@ -89,48 +89,48 @@ router.post('/new',(req,res) => {
       });
     } else {
       fc.newPlayerFaction()
-      .catch((error) => {
-        res.status(500).send(error);
-      })
-      .then((faction) => {
-        const queryText = `INSERT INTO "players" ("id","faction","credits")
+        .catch((error) => {
+          res.status(500).send(error);
+        })
+        .then((faction) => {
+          const queryText = `INSERT INTO "players" ("id","faction","credits")
                           VALUES ($1,$2,3)
                           ON CONFLICT ("id")
                           DO NOTHING RETURNING *;`;
-        client.query(queryText,[id,faction], (queryError, result) => {
-          done();
-          if (queryError) {
-            console.error('Error Querying the database',queryError);
-            res.status(500).send({
-              message: "Error querying database",
-              error: queryError
-            });
-          } else {
-            if (result.rowCount) {
-              res.status(201).send(result.rows[0]);
+          client.query(queryText, [id, faction], (queryError, result) => {
+            done();
+            if (queryError) {
+              console.error('Error Querying the database', queryError);
+              res.status(500).send({
+                message: "Error querying database",
+                error: queryError
+              });
             } else {
-              res.status(200).send("Player record already exists for this ID");
+              if (result.rowCount) {
+                res.status(201).send(result.rows[0]);
+              } else {
+                res.status(200).send("Player record already exists for this ID");
+              }
             }
-          }
-        });
+          });
 
-      })
+        })
     }
   })
 })
 
-router.put('/name',(req,res) => {
+router.put('/name', (req, res) => {
   const { name, id } = req.body;
-  pool.connect((connectError,client,done) => {
+  pool.connect((connectError, client, done) => {
     if (connectError) {
       res.status(500).send({
         message: "Error connecting to database.",
         error: connectError
       });
     } else {
-      const queryText = 
+      const queryText =
         `UPDATE "players" SET "nickname" = $1 WHERE "id" = $2;`;
-      client.query(queryText,[name,id],(queryError,result) => {
+      client.query(queryText, [name, id], (queryError, result) => {
         if (queryError) {
           res.status(500).send({
             message: "Error querying database",
@@ -146,14 +146,14 @@ router.put('/name',(req,res) => {
 
 const levelUpXp = {
   // huter is faction 1
-  1: {
+  [HUNTER]: {
     1: 3,
     2: 5,
     3: 7,
     4: 9
   },
   // zombie is faction 2
-  2: {
+  [ZOMBIE]: {
     1: 5,
     2: 7,
     3: 9,
@@ -161,13 +161,13 @@ const levelUpXp = {
   }
 }
 
-router.put('/levelup/:id',(req,res) => {
+router.put('/levelup/:id', (req, res) => {
   const id = parseInt(req.params.id);
-  const query = new Query(req,res);
+  const query = new Query(req, res);
   query.withParams(
     `SELECT "faction","hunter_level","zombie_level","xp" FROM "players" WHERE "id" = $1;`,
     [id],
-    (req,res,result) => {
+    (req, res, result) => {
       let {
         faction,
         zombie_level,
@@ -176,7 +176,7 @@ router.put('/levelup/:id',(req,res) => {
       } = result.rows[0];
       let level;
       let factionName;
-      if (faction === HUNTER){
+      if (faction === HUNTER) {
         level = hunter_level;
         factionName = "hunter";
       } else if (faction === ZOMBIE) {
@@ -192,8 +192,8 @@ router.put('/levelup/:id',(req,res) => {
       if (leveledUp) {
         query.withParams(
           `UPDATE "players" SET "${factionName}_level" = $1,"xp" = $2 WHERE "id" = $3;`,
-          [level,xp,id],
-          (req,res,result) => {
+          [level, xp, id],
+          (req, res, result) => {
             res.status(200).send({
               leveledUp: true
             });
@@ -207,5 +207,52 @@ router.put('/levelup/:id',(req,res) => {
     }
   );
 });
+
+router.put('/death/:id', (req, res) => {
+  const id = parseInt(req.params.id);
+  const query = new Query(req, res);
+  query.withParams(
+    'SELECT "faction" FROM "players" WHERE "id" = $1;',
+    [id],
+    (req, res, result) => {
+      if (result.rows[0].faction === HUNTER) {
+        /// turn into zombie
+        query.withParams(
+          'UPDATE "players" SET "faction" = $2, "xp" = 0 WHERE "id" = $1;',
+          [id, ZOMBIE],
+          (req, res, result) => {
+            res.status(200).send('Turned to zombie!');
+          }
+        )
+      } else if (result.rows[0].faction === ZOMBIE) {
+        query.withParams(
+          'UPDATE "players" SET "xp" = "xp" + 1 WHERE "id" = $1 RETURNING *;',
+          [id],
+          (req, res, result) => {
+            let player = result.rows[0];
+            let leveledUp = false;
+            while (player.zombie_level < 5 && player.xp >= levelUpXp[ZOMBIE][player.zombie_level]) {
+              leveledUp = true;
+              player.xp -= levelUpXp[ZOMBIE][player.zombie_level];
+              player.zombie_level += 1;
+            }
+            if (leveledUp) {
+              query.withParams(
+                'UPDATE "players" SET "zombie_level" = $1, "xp" = $2 WHERE "id" = $3',
+                [player.zombie_level, player.xp, id],
+                (req,res,result) => {
+                  res.status(200).send('Leveled up!');
+                }
+              )
+            } else {
+              res.status(200).send('Plus one XP');
+            }
+          }
+        )
+      } else {
+        res.status(500).send('Invalid player faction');
+      }
+    })
+})
 
 module.exports = router;

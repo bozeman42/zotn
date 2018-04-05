@@ -82,6 +82,17 @@ export default class PlayerService {
 
   levelUp(id) {
     const vm = this;
-    return vm.$http.put(`/players/levelup/${id}`)
+    return vm.$http.put(`/players/levelup/${id}`);
+  }
+
+  processDeath(id) {
+    const vm = this;
+    console.log('processing death');
+    return vm.$http.put(`/players/death/${id}`)
+    .then(response => {
+      console.log(response);
+      return vm.getPlayer(id)
+      .then(() => vm.data.currentPlayer = vm.data.players[id]);
+    });
   }
 }

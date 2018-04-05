@@ -40,6 +40,18 @@ export default class FactionService {
     })
   }
 
+  getPlayerLanyards(id) {
+    const vm = this;
+    return this.$http.get('/faction/badges/:id')
+    .then((response) => {
+      console.log('badges', response.data)
+      response.data.forEach(badge => {
+        
+      })
+
+    })
+  }
+
   attachPlayerToFactionLanyard(lanyardId,playerId) {
     console.log("Lanyard Id:",lanyardId,"PlayerId:",playerId);
     const data = {
@@ -47,6 +59,15 @@ export default class FactionService {
       playerId: playerId
     }
     return this.$http.put('/faction/badges/attach',data)
+  }
+
+  detachPlayerFromFactionLanyard(lanyardId,playerId) {
+    console.log("detaching Lanyard Id:",lanyardId," from PlayerId:",playerId);
+    const data = {
+      lanyardId: lanyardId,
+      playerId: playerId
+    }
+    return this.$http.put('/faction/badges/detach',data)
     .catch((error) => {
       console.error('error attaching lanyard',error);
     })
