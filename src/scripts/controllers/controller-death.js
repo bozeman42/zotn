@@ -10,7 +10,7 @@ export default class DeathController {
       'FactionService',
       'PlayerService',
       'ScannerService'
-    ]
+    ];
     this.$location = $location;
     this.$routeParams = $routeParams;
     this.$scope = $scope;

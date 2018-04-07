@@ -26,7 +26,7 @@ export default function ($routeProvider, $locationProvider) {
     })
     .when('/shop/:id', {
       templateUrl: '/views/templates/shop.html',
-      controller: 'ShopController as dc'
+      controller: 'ShopController as sc'
     })
     .when('/register', {
       templateUrl: '/views/templates/register.html',
