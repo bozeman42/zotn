@@ -142,4 +142,13 @@ export default class AssetService {
       console.error(error)
     });
   }
+
+  purchaseAsset(assetData,playerId) {
+    const data = {
+      assetData,
+      playerId
+    }
+    this.$http.put('/asset/purchase')
+  }
+
 }

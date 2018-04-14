@@ -247,4 +247,9 @@ router.post('/register',(req,res) => {
   res.sendStatus(200);
 })
 
+router.put('/purchase',(req,res) => {
+  console.log(req.body);
+  res.sendStatus(200);
+})
+
 module.exports = router;
