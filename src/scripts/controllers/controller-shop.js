@@ -10,16 +10,32 @@ class Shop {
       'ScannerService'
     ];
     vm.players = PlayerService.data;
+    vm.as = AssetService;
+    vm.ss = ScannerService;
+    vm.message = '';
     console.log(vm.players);
+    vm.startShopScanner = vm.startShopScanner.bind(this);
     PlayerService.getPlayer($routeParams.id)
     .then((player) => {
       vm.players.currentPlayer = player;
     })
+    .then(this.startShopScanner);
   }
 
-  // to-do: scan asset.
-  // check on server to see if the asset is available and if the player has
-  // sufficient credits to make the purchase
+
+// {"EntityType":"Bite","EntityId":1}
+// {"EntityType":"Bullet","EntityId":1}
+// 
+// 
+//   
+
+  startShopScanner() {
+    const vm = this;
+    vm.message = "Scan an item to purchase it...";
+    vm.ss.start((content) => {
+      vm.as.purchaseAsset(vm.players.currentPlayer.id, content)
+    })
+  }
 
 }
 
