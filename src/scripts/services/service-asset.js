@@ -145,7 +145,6 @@ export default class AssetService {
 
   purchaseAsset(id,asset){
     return this.$http.put('/shop/purchase',{id,asset})
-    .then(response => console.log(response))
-    .catch(error => console.log(error));
+    .catch(error => console.error(error));
   }
 }

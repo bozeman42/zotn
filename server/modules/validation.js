@@ -17,14 +17,24 @@ const assetStructures = {
 }
 
 function validateAsset(asset) {
+  console.log('validating asset');
   return function (validAssetList) {
     return new Promise((resolve,reject) => {
       if (!(typeof asset.EntityType === 'string')) {
-        reject('Invalid asset. No EntityType.');
+        reject({
+          error: 'Invalid asset. No EntityType.',
+          fatal: false
+        });
       } else if (!isListedAsset(asset, validAssetList)) {
-        reject ("Not a valid asset for this transaction.");
+        reject ({
+          error: "Not a valid asset for this transaction.",
+          fatal: false
+        });
       } else if (!isAssetWellFormed(asset)) {
-        reject("Malformed asset. Not all required information is present.");
+        reject({
+          error: 'Malformed asset. Not all required information is present.',
+          fatal: false
+        });
       }
       resolve(asset);
     });
