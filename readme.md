@@ -15,10 +15,22 @@ Zombies of the North is a multiplayer, hunters vs zombies game to be played at c
 5. Run `yarn start` in the root directory
 6. Navigate to `localhost:5000`
 ## Usage concept
-This game is intended to be played at game conventions, specifically [Con of the North](http://www.conofthenorth.org/). Players check in to the system using their convention badge, which has a QR code on the front. In conventions without such a badge, player badges can be produced.
+This game is intended to be played at game conventions, specifically [Con of the North](http://www.conofthenorth.org/). Players check in to the system using their convention badge, which has a QR code with a JSON object on the front. In conventions without such a badge, player badges can be produced.
 
 Players are assigned a faction and are issued a faction lanyard.
 ![](https://i.imgur.com/1UWBs1E.jpg)
 *Faction lanyard prototypes*
 
 Players interact as they move about the convention and interact through exchanges of QR coded assets and check in at game kiosks periodically to turn in zombie/hunter kills and purchase new supplies with in game credits.
+
+## QR Code data
+* Player badges: `{"EntityType":"Badge","EntityId":1}`
+    * EntityId is a unique id number
+* Faction Lanyards: {"EntityType":"FactionLanyard","EntityId":20, "Level":3,"Faction":1}
+    * EntityId is a unique id number
+    * Level is an integer from 1-5
+    * Faction is the faction ID, currently 1 for Hunter, 2 for Zombie
+* Bites: {"EntityType":"Bite","EntityId":1}
+* Bullets: {"EntityType":"Bullet","EntityId":1}
+* Boons: {"EntityType":"Boon","EntityId":4,"BoonId": 1}
+    * BoonId is the ID of the boon type e.g. BoonId 1 is Armor
