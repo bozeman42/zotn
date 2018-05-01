@@ -6,6 +6,7 @@ Zombies of the North is a multiplayer, hunters vs zombies game to be played at c
 ## Pre-requisites
 1. Install postgres
 2. Install npm / yarn
+3. Requires either a webcam or a dedicated HID QR code scanner ([such as this](https://www.amazon.com/TEEMI-Automatic-Hands-free-presentation-Supermarket/dp/B073J7HTJR/ref=sr_1_9?ie=UTF8&qid=1525150436&sr=8-9&keywords=teemi%2Bbarcode%2Bscanner&th=1)) for data entry
 ## Instructions
 1. Fork / clone the repository
 2. Create the database according to the `zotn.sql` file.
