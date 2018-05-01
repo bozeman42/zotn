@@ -26,11 +26,11 @@ Players interact as they move about the convention and interact through exchange
 ## QR Code data
 * Player badges: `{"EntityType":"Badge","EntityId":1}`
     * EntityId is a unique id number
-* Faction Lanyards: {"EntityType":"FactionLanyard","EntityId":20, "Level":3,"Faction":1}
+* Faction Lanyards: `{"EntityType":"FactionLanyard","EntityId":20, "Level":3,"Faction":1}`
     * EntityId is a unique id number
     * Level is an integer from 1-5
     * Faction is the faction ID, currently 1 for Hunter, 2 for Zombie
-* Bites: {"EntityType":"Bite","EntityId":1}
-* Bullets: {"EntityType":"Bullet","EntityId":1}
-* Boons: {"EntityType":"Boon","EntityId":4,"BoonId": 1}
-    * BoonId is the ID of the boon type e.g. BoonId 1 is Armor
+* Bites: `{"EntityType":"Bite","EntityId":1}`
+* Bullets: `{"EntityType":"Bullet","EntityId":1}`
+* Boons: `{"EntityType":"Boon","EntityId":4,"BoonId": 1}`
+    * BoonId is the ID of the boon type e.g. `"BoonId": 1` is Armor
