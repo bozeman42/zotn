@@ -1,0 +1,16 @@
+{
+  "compilerOptions": {
+    "sourceMap": true,
+    "target": "es5",
+    "lib": [
+      "es2018",
+      "dom"
+    ],
+    "types": [
+            "angular"
+        ]
+  },
+  "include": [
+    "src/**/*"
+  ]
+}

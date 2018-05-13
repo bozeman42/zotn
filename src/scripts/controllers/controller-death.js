@@ -1,4 +1,4 @@
-import { HUNTER, ZOMBIE } from '../constants/factions';
+import { HUNTER, ZOMBIE } from '../constants/factions.ts';
 import commonEmitter from '../modules/common-emitter';
 export default class DeathController {
   constructor($location, $routeParams, $scope, AssetService, FactionService, PlayerService, ScannerService) {

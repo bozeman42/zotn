@@ -1,4 +1,4 @@
-import angular from 'angular';
+import * as angular from 'angular';
 import 'bootstrap/dist/css/bootstrap.css';
 import '../sass/app.scss';
 

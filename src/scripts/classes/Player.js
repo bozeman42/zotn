@@ -1,4 +1,4 @@
-import { HUNTER, ZOMBIE, NO_FACTION, HUNTER_FACTION_NAME, ZOMBIE_FACTION_NAME, HUNTER_ZOMBIE_RATIO } from '../constants/factions';
+import { HUNTER, ZOMBIE, NO_FACTION, HUNTER_FACTION_NAME, ZOMBIE_FACTION_NAME, HUNTER_ZOMBIE_RATIO } from '../constants/factions.ts';
 import zombieIcon from '../../assets/images/zombie-icon.png';
 import hunterIcon from '../../assets/images/hunter-icon.png';
 import noFactionIcon from '../../assets/images/question-mark.png';

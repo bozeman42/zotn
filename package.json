@@ -21,6 +21,7 @@
   },
   "homepage": "https://github.com/bozeman42/zotn#readme",
   "dependencies": {
+    "@types/angular": "^1.6.45",
     "angular": "^1.6.9",
     "angular-route": "^1.6.9",
     "body-parser": "^1.18.2",
@@ -39,8 +40,11 @@
     "babel-preset-env": "^1.6.1",
     "css-loader": "^0.28.10",
     "file-loader": "^1.1.9",
+    "fork-ts-checker-webpack-plugin": "^0.4.1",
     "node-sass": "^4.7.2",
     "sass-loader": "^6.0.6",
-    "style-loader": "^0.20.2"
+    "style-loader": "^0.20.2",
+    "ts-loader": "3.5",
+    "typescript": "^2.8.3"
   }
 }

@@ -1,5 +1,5 @@
 import Player from '../classes/Player';
-import { ZOMBIE, HUNTER, HUNTER_ZOMBIE_RATIO } from '../constants/factions';
+import { ZOMBIE, HUNTER, HUNTER_ZOMBIE_RATIO } from '../constants/factions.ts';
 export default class PlayerService {
   constructor($http) {
     this.$inject = ['$http'];

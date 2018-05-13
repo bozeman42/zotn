@@ -1,4 +1,4 @@
-import { HUNTER, ZOMBIE } from '../constants/factions';
+import { HUNTER, ZOMBIE } from '../constants/factions.ts';
 
 export default class KillController {
   constructor($location, $routeParams, $scope, PlayerService, ScannerService, FactionService) {
