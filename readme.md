@@ -10,10 +10,11 @@ Zombies of the North is a multiplayer, hunters vs zombies game to be played at c
 ## Instructions
 1. Fork / clone the repository
 2. Create the database according to the `zotn.sql` file.
-3. run `yarn install` in the root directory
-4. In another terminal window, navigate to the server directory and run `yarn start`
-5. Run `yarn start` in the root directory
-6. Navigate to `localhost:5000`
+3. Copy the example.env, rename to '.env' and fill in appropriate values for your system
+4. run `yarn install` in the root directory
+5. In another terminal window, navigate to the server directory and run `yarn start`
+6. Run `yarn start` in the root directory
+7. Navigate to `localhost:5000`
 ## Usage concept
 This game is intended to be played at game conventions, specifically [Con of the North](http://www.conofthenorth.org/). Players check in to the system using their convention badge, which has a QR code with a JSON object on the front. In conventions without such a badge, player badges can be produced.
 
