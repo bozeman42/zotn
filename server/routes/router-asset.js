@@ -1,9 +1,6 @@
 const router = require('express').Router();
 const pool = require('../modules/pool');
 const boons = require('../modules/boons');
-// {"EntityType":"Bullet","EntityId":1}
-// {"EntityType":"Boon","EntityId":9,"BoonId": 2}
-// {"EntityType":"Bite","EntityId":8}
 
 router.get('/boons',(req,res) => {
   boons.get(req,res);
