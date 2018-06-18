@@ -24,7 +24,7 @@ export default function ($routeProvider, $locationProvider) {
       templateUrl: '/views/templates/death.html',
       controller: 'DeathController as dc'
     })
-    .when('/shop/:id', {
+    .when('/shop/:id/:new?', {
       templateUrl: '/views/templates/shop.html',
       controller: 'ShopController as sc'
     })

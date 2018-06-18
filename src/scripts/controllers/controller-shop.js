@@ -13,6 +13,7 @@ class Shop {
     vm.as = AssetService;
     vm.ps = PlayerService;
     vm.ss = ScannerService;
+    
     vm.message = '';
     console.log(vm.players);
     vm.startShopScanner = vm.startShopScanner.bind(this);

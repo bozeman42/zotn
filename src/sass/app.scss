@@ -1,3 +1,6 @@
+$hunter-orange: #ff6600;
+$zombie-green: greenyellow;
+
 h1 {
   color: black;
 }
@@ -100,11 +103,11 @@ button:active.drop-shadow{
 }
 
 .zombieGreen {
-  background-color: greenyellow;
+  background-color: $zombie-green;
 }
 
 .hunterOrange {
-  background-color: #ff6600;
+  background-color: $hunter-orange;
 }
 
 #scannerIndicator {
